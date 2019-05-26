@@ -31,6 +31,8 @@ class idw():
         self.resolution = resolution
         self.coordinate_type = coordinate_types
         self.interpolated_values = None
+        self.x_grid = None
+        self.y_grid = None
 
     def make_grid(self, x, y, res, offset=0.2):
 
@@ -87,18 +89,19 @@ class idw():
 	 	"""
 	 		Use the conversions and projections for small changes in LatLong
  		"""
-	 	return "To be done later"
+	 	    print ("To be done later")
+            return self
 
         if self.coordinate_type == 'latlong_large':
             """
                 Code to be written after understanding all the projections.
             """
-            return "To be done later"
+            print ("To be done later")
+            return self
 
         if self.coordinate_type=="Euclidean":
-        
-            X = deepcopy(X[:,0])
-            y = deepcopy(y[:,1])
+            
+            X = deepcopy(np.c_[X,y])
 
             if self.resolution=='high':
                 xx,yy = self.make_grid(X,y,1000)
@@ -108,7 +111,7 @@ class idw():
                 
             if self.resolution=='standard':
                 xx,yy = self.make_grid(X,y,100)
-            
+
             new = []
             new_arr = deepcopy(X)
             for points in new_arr:
@@ -141,11 +144,35 @@ class idw():
                         for elem in range(len(x_nz)):
                             source = np.array([x_nz[elem],y_nz[elem]])
                             target = np.array([xx[0][i],yy[j][0]])
-                            dist = (np.abs(xx[0][source[0]] - target[0])**exponent + np.abs(yy[source[1]][0] - target[1])**exponent)**(1/exponent)
+                            dist = (np.abs(xx[0][source[0]] - target[0])**self.exponent + np.abs(yy[source[1]][0] - target[1])**self.exponent)**(1/self.exponent)
                             final[i][j]+=new_grid[x_nz[elem],y_nz[elem]]/dist
                             normalise+=1/(dist)
                     final[i][j]/=normalise
             self.interpolated_values = final
-        return self
+            self.x_grid = xx
+            self.y_grid = yy
         
-    
+        return self
+
+    def predict(self, X):
+        """ The function call to predict using the interpolated data
+        Parameters
+        ----------
+        X: {array-like, 2D matrix}, shape(n_samples, 2)
+            The set of all coordinates, where we have ground truth
+            values
+        
+
+        Returns
+        -------
+        y: array-like, shape(n_samples,)
+            The set of all the ground truth values using which
+            we perform interpolation 
+        """
+        if self.coordinate_type == 'Euclidean':
+            for i in range(self.x_grid[0]):
+                # Will add the code soon enough!
+        
+        
+            
+                
