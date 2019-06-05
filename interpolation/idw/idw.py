@@ -53,10 +53,10 @@ class idw():
         """
 
          if self.coordinate_type == 'latlong_small':
-	 	"""
-	 		Use the conversions and projections for small changes in LatLong
- 		"""
-	 	    print ("To be done later")
+        """
+            Use the conversions and projections for small changes in LatLong
+        """
+            print ("To be done later")
             return self
 
         if self.coordinate_type == 'latlong_large':
@@ -70,55 +70,80 @@ class idw():
             
             X = deepcopy(np.c_[X,y])
 
+            # Makes the grid. Check for more on the make_grid function inside utils.py
             if self.resolution=='high':
-                xx,yy = self.make_grid(X,y,1000)
+                xx,yy = make_grid(X,y,1000)
                 
             if self.resolution=='low':
-                xx,yy = self.make_grid(X,y,10)
+                xx,yy = make_grid(X,y,10)
                 
             if self.resolution=='standard':
-                xx,yy = self.make_grid(X,y,100)
+                xx,yy = make_grid(X,y,100)
 
+
+                   
             new = []
-            new_arr = deepcopy(X)
-            for points in new_arr:
+            # This list stores all the tuples that contain points, and the closest point to the point in the 2D Grid that we are concerned with.
+
+            for points in X:
+                # Check the closest point in the grid, corresponding to the source data point.
+                # We assume that the source is located at those exact coordinates on the grid.
+                # IDW is done using these source data point locations, while computing distance.
+
                 min_dist = np.inf
                 val = 0
                 for j in range(len(yy)):
-                    temp = yy[j][0]
+                    temp = yy[j,0]
                     for i in range(len(xx[0])):
+                        # Just checks for the closest location
                         dist = np.linalg.norm(np.array([xx[0][i],temp]) - points[:2])
                         if dist<min_dist:
                             min_dist = dist
-                            val = (i,j)
+                            val = (i,j)     
                 new.append((points,val))
+            # New now contains all the points that we're concerned with.
+
             new_grid = np.zeros((len(xx),len(yy)))
+
             for i in range(len(new)):
+                # Storing the source data point values into the corresponding grid locations.
+                # As from above, we store all the values needed in the new_list. 
                 x = new[i][1][0]
                 y = new[i][1][1]
                 new_grid[x][y] = new[i][0][2]
             x_nz,y_nz = np.nonzero(new_grid)
+
+            # This list_nz contains all the non -zero points or the source data points that we will have
             list_nz = []
             for i in range(len(x_nz)):
                 list_nz.append((x_nz[i],y_nz[i]))
-            final = np.copy(new_grid)
+
+            final = deepcopy(new_grid)
+            ## The final grid that we create will have all the needed interpolated values
+            
             for i in range(len(xx[0])):
                 for j in range(len(yy)):
                     normalise = 0
                     if (i,j) in list_nz:
+                        ## These are the source data points. We can't interpolate here. 
+                        # The point estimates have to be preserved
                         continue
                     else:
                         for elem in range(len(x_nz)):
+                            # Looping through every non-zero location
                             source = np.array([x_nz[elem],y_nz[elem]])
                             target = np.array([xx[0][i],yy[j][0]])
+                            ## Here we use the dist to compute the interpolated value, based on the exponent that the user provides. 
                             dist = (np.abs(xx[0][source[0]] - target[0])**self.exponent + np.abs(yy[source[1]][0] - target[1])**self.exponent)**(1/self.exponent)
                             final[i][j]+=new_grid[x_nz[elem],y_nz[elem]]/dist
                             normalise+=1/(dist)
+                    # We divide by the normalise factor, as per the definiton of the inverse distance weighted interpolation
                     final[i][j]/=normalise
             self.interpolated_values = final
             self.x_grid = xx
             self.y_grid = yy
         
+        # Return the self object -- This is useful if we want to do something like = object.fit().predict() etc., 
         return self
 
     def predict(self, X):
