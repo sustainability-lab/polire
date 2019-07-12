@@ -3,9 +3,8 @@
 This is a module for IDW Spatial Interpolation
 """
 import numpy as np
-import pandas as pd
-from utils import make_grid
-
+from .utils import gridding
+from .constants import low_res, med_res, high_res
 class idw():
     """ A class that is declared for performing IDW Interpolation.
     For more information on how this method works, kindly refer to

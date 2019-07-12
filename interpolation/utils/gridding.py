@@ -1,9 +1,9 @@
-""" Standard Utility Script
+""" Standard Utility Script for Gridding Data
     1. Contains all the common functions that 
         will be employed across various different interpolators
 
 """
-
+import numpy as np
 
 def make_grid(self, x, y, res, offset=0.2):
 
