@@ -1,4 +1,4 @@
-from ..utils import RESOLUTION
+from ..constants import RESOLUTION
 
 class Base:
     """ A class that is declared for performing Interpolation.
