@@ -1,3 +1,5 @@
 **/*.ipynb_checkpoints
 **/*.pyc
 testing_directory_nb.ipynb
+.env/
+*__pycache__/
