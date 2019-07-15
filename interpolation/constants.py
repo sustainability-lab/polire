@@ -8,6 +8,6 @@ high_res = 1000
 
 RESOLUTION = {
     'low': 10,
-    'med': 100,
+    'standard': 100,
     'high': 1000
 }
