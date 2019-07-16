@@ -5,11 +5,11 @@ from ..base import Base
 
 class Random(Base):
     """
-    Randomly interpolate by picking values between maximum and
+    Class to randomly interpolate by picking values between maximum and
     minimum measurements.
 
-    Note: Even if the point to predict is present in training
-    set, we return a random value.
+    Note: Even if a point on the requested grid is present in 
+    the training set, we return a random value for it.
     """
   
     def __init__(
@@ -20,13 +20,17 @@ class Random(Base):
         super().__init__(resolution, coordinate_type)
 
     def _fit(self, X, y):
-        """Function for fitting random interpolation."""
+        """Function for fitting random interpolation.
+        This function is not supposed to be called directly.
+        """
         self.ymax = max(y)
         self.ymin = min(y)
         return self
         
     def _predict(self, lims):
-        """Function for random interpolation."""
+        """Function for random interpolation.
+        This function is not supposed to be called directly.
+        """
         x1min, x1max, x2min, x2max = lims
         return np.random.uniform(
             low=self.ymin,
