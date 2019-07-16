@@ -39,16 +39,15 @@ class Base:
         Parameters
         ----------
         x1min, x1max: float,
-            Upper and lower bound on x1 dimention for interpolation.
+            Upper and lower bound on x1 dimension for the interpolation.
 
         x2min, x2max: float,
-            Upper and lower bound on x2 dimention for interpolation.
+            Upper and lower bound on x2 dimension for the interpolation.
         
         Returns
         -------
         y: array-like, shape(n_samples,)
-            The set of all the ground truth values using which
-            we perform interpolation.
+            Interpolated values on the grid requested.
         """
         assert (self.x1min_d >= x1min), "Extrapolation not supported"
         assert (self.x1max_d <= x1max), "Extrapolation not supported"

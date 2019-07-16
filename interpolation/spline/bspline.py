@@ -7,12 +7,12 @@ from ..base import Base
 
 class BSpline(Base):
     """
-    Using a bivariate B-spline interpolate values.
+    Class to use a bivariate B-spline to interpolate values.
     https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.interpolate.bisplrep.html#scipy.interpolate.bisplrep
     
     Parameters
     ----------
-    kx, ky: int, optional
+    kx, ky: int, int, optional
         The degrees of the spline (1 <= kx, ky <= 5). 
         Third order (kx=ky=3) is recommended.
 
@@ -37,21 +37,12 @@ class BSpline(Base):
         self.s = s
 
     def _fit(self, X, y):
-        """ The function call to fit the spline model on the given data. 
-        Parameters
-        ----------
-        X: {array-like, 2D matrix}, shape(n_samples, 2)
-            The set of all coordinates, where we have ground truth
-            values
-        y: array-like, shape(n_samples,)
-            The set of all the ground truth values using which
-            we perform interpolation
-        Returns
-        -------
-        self : object
-            Returns self
+        """ The function call to fit the spline model on the given data.
+        This function is not supposed to be called directly.        
         """
-        # fitting the curve 
+        # fitting the curve
+        # bisplrep returns details of the fitted curve
+        # read bisplrep docs for more info about it's return values.
         self.tck = bisplrep(
             X[:, 0], X[:, 1], y,
             kx=self.kx, ky=self.ky,
@@ -60,21 +51,8 @@ class BSpline(Base):
         return self
         
     def _predict(self, lims):
-        """ The function call to predict using the BSpline interpolation.
-        Parameters
-        ----------
-        X: {array-like, 2D matrix}, shape(n_samples, 2)
-            The set of all coordinates, where we have ground truth
-            values
-        
-        Returns
-        -------
-        y: array-like, shape(n_samples,)
-            The set of all the ground truth values using which
-            we perform interpolation.
-            
-        Note: Even if the point to predict is present in training
-        set, we return a random value.
+        """The function to predict using the BSpline interpolation.
+        This function is not supposed to be called directly.
         """
         x1min, x1max, x2min, x2max = lims
         return bisplev(
