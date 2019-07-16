@@ -22,14 +22,9 @@ class BSpline(Base):
         in z, then a good s-value should be found in the
         range `(m-sqrt(2*m),m+sqrt(2*m))` where `m=len(x)`.
     """
-  
+
     def __init__(
-        self,
-        kx = 3,
-        ky = 3,
-        s = None,
-        resolution = 'standard',
-        coordinate_type = 'Euclidean'
+        self, kx=3, ky=3, s=None, resolution="standard", coordinate_type="Euclidean"
     ):
         super().__init__(resolution, coordinate_type)
         self.kx = kx
@@ -43,13 +38,9 @@ class BSpline(Base):
         # fitting the curve
         # bisplrep returns details of the fitted curve
         # read bisplrep docs for more info about it's return values.
-        self.tck = bisplrep(
-            X[:, 0], X[:, 1], y,
-            kx=self.kx, ky=self.ky,
-            s=self.s
-        )
+        self.tck = bisplrep(X[:, 0], X[:, 1], y, kx=self.kx, ky=self.ky, s=self.s)
         return self
-        
+
     def _predict(self, lims):
         """The function to predict using the BSpline interpolation.
         This function is not supposed to be called directly.
@@ -58,5 +49,5 @@ class BSpline(Base):
         return bisplev(
             np.linspace(x1min, x1max, self.resolution),
             np.linspace(x2min, x2max, self.resolution),
-            self.tck
+            self.tck,
         )
