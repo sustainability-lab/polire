@@ -26,12 +26,13 @@ class Trend(Base):
         t = Trend(order=None, custom_poly=func)
         ```
     """
+
     def __init__(
         self,
-        order = 1,
-        custom_poly = None,
-        resolution = 'standard',
-        coordinate_type = 'Euclidean'
+        order=1,
+        custom_poly=None,
+        resolution="standard",
+        coordinate_type="Euclidean",
     ):
         super().__init__(resolution, coordinate_type)
         self.order = order
@@ -51,7 +52,7 @@ class Trend(Base):
         # fitting the curve using scipy
         self.popt, self.pcov = curve_fit(self.func, (X[:, 0], X[:, 1]), y)
         return self
-        
+
     def _predict(self, lims):
         """Function for trend interpolation.
         This function is not supposed to be called directly.
