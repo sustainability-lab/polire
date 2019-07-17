@@ -4,3 +4,5 @@ testing_directory_nb.ipynb
 .env/
 *__pycache__/
 .vscode
+build
+dist

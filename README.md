@@ -12,3 +12,4 @@ As per the ArcGis link [here](http://desktop.arcgis.com/en/arcmap/latest/tools/s
 8. Trend
 
 
+Aknowledgement to sklearn template for helping to package into a PiPy package.
