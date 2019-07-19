@@ -1,15 +1,12 @@
 
 """
 This is a module for IDW Spatial Interpolation
-Author: S Deepak Narayanan, IIT Gandhinagar
-Contact: deepak.narayanan@iitgn.ac.in
 """
 import numpy as np
-from .utils import gridding
-from .constants import low_res, med_res, high_res
+from ..utils import gridding
 from ..base import Base
 
-class idw():
+class idw(Base):
     """ A class that is declared for performing IDW Interpolation.
     For more information on how this method works, kindly refer to
     https://en.wikipedia.org/wiki/Inverse_distance_weighting
@@ -55,25 +52,8 @@ class idw():
     	""" This function is for the IDW Class.
     	This is not expected to be called directly
     	"""
-
-        """ The function call to fit the model on the given data. 
-        Parameters
-        ----------
-        X: {array-like, 2D matrix}, shape(n_samples, 2)
-            The set of all coordinates, where we have ground truth
-            values
-        y: array-like, shape(n_samples,)
-            The set of all the ground truth values using which
-            we perform interpolation
-
-        Returns
-        -------
-        self : object
-            Returns self
-        """
         self.X = X
         self.y = y
-
         return self
         
             
@@ -160,19 +140,6 @@ class idw():
         """ The function call to predict using the interpolated data
         in IDW interpolation. This should not be called directly.
         """
-        # Parameters
-        # ----------
-        # X: {array-like, 2D matrix}, shape(n_samples, 2)
-        #     The set of all coordinates, where we have ground truth
-        #     values
-        
-
-        # Returns
-        # -------
-        # y: array-like, shape(n_samples,)
-        #     The set of all the ground truth values using which
-        #     we perform interpolation 
-        
         result = np.zeros(X.shape)
 
         for i in range(len(X)):
