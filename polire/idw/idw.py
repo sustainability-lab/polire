@@ -19,28 +19,28 @@ class idw(Base):
         across space. Default value is 2.
     
     Attributes
-	----------
-	Interpolated Values : {array-like, 2D matrix}, shape(resolution, resolution)
-	This contains all the interpolated values when the interpolation is performed
-	over a grid, instead of interpolation over a set of points.
+    ----------
+    Interpolated Values : {array-like, 2D matrix}, shape(resolution, resolution)
+    This contains all the interpolated values when the interpolation is performed
+    over a grid, instead of interpolation over a set of points.
 
-	X : {array-like, 2D matrix}, shape(n_samples, 2)
-	Set of all the coordinates available for interpolation.
+    X : {array-like, 2D matrix}, shape(n_samples, 2)
+    Set of all the coordinates available for interpolation.
 
-	y : array-like, shape(n_samples,)
-	Set of all the available values at the specified X coordinates.
+    y : array-like, shape(n_samples,)
+    Set of all the available values at the specified X coordinates.
 
-	result : array_like, shape(n_to_predict, )
-	Set of all the interpolated values when interpolating over a given
-	set of data points.
+    result : array_like, shape(n_to_predict, )
+    Set of all the interpolated values when interpolating over a given
+    set of data points.
 
     """
     def __init__(
-    	self, 
-    	exponent = 2,
-    	resolution = "standard",
-    	coordinate_type = "Eucledian",
-	):
+        self, 
+        exponent = 2,
+        resolution = "standard",
+        coordinate_type = "Eucledian",
+    ):
         super().__init__(resolution, coordinate_type)
         self.exponent = exponent
         self.interpolated_values = None
@@ -49,9 +49,9 @@ class idw(Base):
         self.result = None
 
     def _fit(self, X, y):
-    	""" This function is for the IDW Class.
-    	This is not expected to be called directly
-    	"""
+        """ This function is for the IDW Class.
+        This is not expected to be called directly
+        """
         self.X = X
         self.y = y
         return self
@@ -64,12 +64,12 @@ class idw(Base):
 
         # Makes the grid. Check for more on the make_grid function inside the utils directory
         if lims is None:
-        	xx, yy = make_grid(self.X, self.y, self.resolution)
-    	else:
-	        x1min, x1max, x2min, x2max = lims
-	        x1 = np.linspace(x1min, x1max, self.resolution)
-	        x2 = np.linspace(x2min, x2max, self.resolution)
-	        xx, yy = np.meshgrid(x1, x2)
+            xx, yy = make_grid(self.X, self.y, self.resolution)
+        else:
+            x1min, x1max, x2min, x2max = lims
+            x1 = np.linspace(x1min, x1max, self.resolution)
+            x2 = np.linspace(x2min, x2max, self.resolution)
+            xx, yy = np.meshgrid(x1, x2)
 
 
         new = []
@@ -143,17 +143,17 @@ class idw(Base):
         result = np.zeros(X.shape)
 
         for i in range(len(X)):
-        	points = X[i]
-     		# Preserve point estimates. This is mandatory in IDW
-        	if points in self.X:
-        		index = np.unique(np.where(self.X == points)[0])[0]
-        		## This is to find the corresponding index 
-        		result[i] = self.y[index]
-        	else:
-				weights = np.array([1/np.linalg.norm(points - self.X[j])**self.exponent for j in range(len(self.X))])
-				result[i] = np.multiply(self.y, weights).sum()/(weights.sum())
-		self.result = result
-		return result
+            points = X[i]
+            # Preserve point estimates. This is mandatory in IDW
+            if points in self.X:
+                index = np.unique(np.where(self.X == points)[0])[0]
+                ## This is to find the corresponding index 
+                result[i] = self.y[index]
+            else:
+                weights = np.array([1/np.linalg.norm(points - self.X[j])**self.exponent for j in range(len(self.X))])
+                result[i] = np.multiply(self.y, weights).sum()/(weights.sum())
+        self.result = result
+        return result
 
 
 
