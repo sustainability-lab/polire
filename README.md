@@ -1,5 +1,7 @@
-TODO
-----
+Polire
+------
+
+The word "interpolation" has Latin origin and is composed of two words - Inter meaning between and Polire meaning to polish.
 
 As per the ArcGis link [here](http://desktop.arcgis.com/en/arcmap/latest/tools/spatial-analyst-toolbox/comparing-interpolation-methods.htm)
 1. IDW
