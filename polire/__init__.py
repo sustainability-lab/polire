@@ -1,4 +1,5 @@
 from .utils import *
 from .constants import RESOLUTION
-
 from ._version import __version__
+
+__all__ = ['__version__']
