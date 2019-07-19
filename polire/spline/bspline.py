@@ -3,6 +3,7 @@ from scipy.interpolate import bisplrep, bisplev
 
 
 from ..base import Base
+from ..utils import find_closest
 
 
 class BSpline(Base):
@@ -41,7 +42,7 @@ class BSpline(Base):
         self.tck = bisplrep(X[:, 0], X[:, 1], y, kx=self.kx, ky=self.ky, s=self.s)
         return self
 
-    def _predict(self, lims):
+    def _predict_grid(self, lims):
         """The function to predict using the BSpline interpolation.
         This function is not supposed to be called directly.
         """
@@ -51,3 +52,13 @@ class BSpline(Base):
             np.linspace(x2min, x2max, self.resolution),
             self.tck,
         )
+
+    # def _predict(self, X):
+    #     # grid = bisplev(
+    #     #     np.linspace(x1min, x1max, self.resolution),
+    #     #     np.linspace(x2min, x2max, self.resolution),
+    #     #     self.tck,
+    #     # )
+    #     # ix = find_closest(grid, X)
+    #     # return grid[ix]
+    #     pass
