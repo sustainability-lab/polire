@@ -53,7 +53,7 @@ class Trend(Base):
         self.popt, self.pcov = curve_fit(self.func, (X[:, 0], X[:, 1]), y)
         return self
 
-    def _predict(self, lims):
+    def _predict_grid(self, lims):
         """Function for trend interpolation.
         This function is not supposed to be called directly.
         """
@@ -62,3 +62,10 @@ class Trend(Base):
         x2 = np.linspace(x2min, x2max, self.resolution)
         X1, X2 = np.meshgrid(x1, x2)
         return self.func((X1, X2), *self.popt)
+
+    def _predict(self, X):
+        """Function for random interpolation.
+        This function is not supposed to be called directly.
+        """
+        x1, x2 = X[:, 0], X[:, 1]
+        return self.func((x1, x2), *self.popt)

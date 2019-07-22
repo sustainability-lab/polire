@@ -3,9 +3,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
-from interpolation.random.random import Random
-from interpolation.trend.trend import Trend
-from interpolation.spline.bspline import BSpline
+from polire.random.random import Random
+from polire.trend.trend import Trend
+from polire.spline.bspline import BSpline
 
 # sample data
 X = [[0, 0], [0, 3], [3, 0], [3, 3]]
