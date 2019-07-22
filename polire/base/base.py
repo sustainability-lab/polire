@@ -63,7 +63,7 @@ class Base:
         # checking if model is fitted or not
         assert self._fit_called, "First call fit method to fit the model"
 
-        # calling child specific _predict_grid method
+        # calling child specific _predict method
         return self._predict(X)
 
     def predict_grid(self, x1lim=None, x2lim=None):
@@ -100,7 +100,7 @@ class Base:
         assert self.x2max_d <= x2max, "Extrapolation not supported"
 
         # calling child specific _predict_grid method
-        return self._predict_grid((x1min, x1max), (x2min, x2max))
+        return self._predict_grid(x1lim, x2lim)
 
     def _fit(self, X, y):
         raise NotImplementedError
