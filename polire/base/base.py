@@ -100,11 +100,7 @@ class Base:
         assert self.x2max_d <= x2max, "Extrapolation not supported"
 
         # calling child specific _predict_grid method
-<<<<<<< HEAD
         return self._predict_grid(x1lim, x2lim)
-=======
-        return self._predict_grid((x1min, x1max), (x2min, x2max))
->>>>>>> 67184d0a05a9eab243db26f30ab1c0f6164615e1
 
     def _fit(self, X, y):
         raise NotImplementedError
