@@ -10,6 +10,7 @@ class Base:
     def __init__(self, resolution, coordinate_types):
         self.resolution = RESOLUTION[resolution]
         self.coordinate_type = coordinate_types
+        self._fit_called = False
 
     def fit(self, X, y):
         """The function call to fit the model on the given data.
@@ -31,6 +32,7 @@ class Base:
             Returns self
 
         """
+        self._fit_called = True
         self.x1min_d = min(X[:, 0])
         self.x1max_d = max(X[:, 0])
         self.x2min_d = min(X[:, 1])
@@ -55,6 +57,7 @@ class Base:
             The set of interpolated values for the points used to
             call the function.
         """
+        assert self._fit_called, "First call fit method to fit the model"
         return self._predict(X)
 
     def predict_grid(self, x1lim, x2lim):
@@ -73,6 +76,7 @@ class Base:
         y: array-like, shape(n_samples,)
             Interpolated values on the grid requested.
         """
+        assert self._fit_called, "First call fit method to fit the model"
         (x1min, x1max) = x1lim
         (x2min, x2max) = x2lim
         assert self.x1min_d >= x1min, "Extrapolation not supported"
