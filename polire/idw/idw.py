@@ -57,7 +57,8 @@ class idw(Base):
         return self
         
             
-    def _predict_grid(self, lims=None):
+    def _predict_grid(self, x1lim, x2lim):
+        lims = (*x1lim, *x2lim)
         # X = deepcopy(np.c_[X,y])
 
         X = np.c_[self.X, self.y]
