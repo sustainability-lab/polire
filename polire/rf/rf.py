@@ -1,19 +1,21 @@
 import numpy as np
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import RBF, Matern
+from sklearn.ensemble import RandomForestRegressor
 
 from ..base import Base
 
 
-class GaussianProcess(Base):
+class RForest(Base):
     """
-    Class to interpolate by fitting a gaussian process to given
+    Class to interpolate by fitting a XGBoost Regressor to given
     data.
     """
 
-    def __init__(self, resolution="standard", coordinate_type="Euclidean", **kwargs):
+    def __init__(self,
+    n_estimators=10,
+    resolution="standard", 
+    coordinate_type="Euclidean", **kwargs):
         super().__init__(resolution, coordinate_type)
-        self.reg = GaussianProcessRegressor(normalize_y=True, kernel=Matern())
+        self.reg = RandomForestRegressor(n_estimators=n_estimators)
 
     def _fit(self, X, y):
         """Function for fitting.

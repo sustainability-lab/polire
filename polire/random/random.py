@@ -23,11 +23,10 @@ class Random(Base):
         self.ymin = min(y)
         return self
 
-    def _predict_grid(self, lims):
+    def _predict_grid(self, x1lim, x2lim):
         """Function for random grid interpolation.
         This function is not supposed to be called directly.
         """
-        x1min, x1max, x2min, x2max = lims
         return np.random.uniform(
             low=self.ymin, high=self.ymax, size=(self.resolution, self.resolution)
         )

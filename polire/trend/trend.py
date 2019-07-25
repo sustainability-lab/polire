@@ -53,11 +53,15 @@ class Trend(Base):
         self.popt, self.pcov = curve_fit(self.func, (X[:, 0], X[:, 1]), y)
         return self
 
-    def _predict_grid(self, lims):
+    def _predict_grid(self, x1lim, x2lim):
         """Function for trend interpolation.
         This function is not supposed to be called directly.
         """
-        x1min, x1max, x2min, x2max = lims
+        # getting the boundaries for interpolation
+        x1min, x1max = x1lim
+        x2min, x2max = x2lim
+
+        # forming the grid
         x1 = np.linspace(x1min, x1max, self.resolution)
         x2 = np.linspace(x2min, x2max, self.resolution)
         X1, X2 = np.meshgrid(x1, x2)
