@@ -6,6 +6,15 @@ import numpy as np
 from ..utils import gridding
 from ..base import Base
 
+def is_row_in_array(row , arr):
+    return list(row) in arr.tolist()
+
+def get_index(row, arr):
+    t1 = np.where(arr[:,0] == row[0])
+    t2 = np.where(arr[:,1] == row[1])
+    index = np.intersect1d(t1,t2)[0]
+    # If length of index exceeds one!! - Uniqueness Error
+    
 class idw(Base):
     """ A class that is declared for performing IDW Interpolation.
     For more information on how this method works, kindly refer to
@@ -141,20 +150,22 @@ class idw(Base):
         """ The function call to predict using the interpolated data
         in IDW interpolation. This should not be called directly.
         """
-        result = np.zeros(X.shape)
-
+        result = np.zeros(X.shape[0])
+        # print(X.shape,result)
         for i in range(len(X)):
-            points = X[i]
+            point = X[i]
+
             # Preserve point estimates. This is mandatory in IDW
-            if points in self.X:
-                index = np.unique(np.where(self.X == points)[0])[0]
-                ## This is to find the corresponding index 
+            flag = is_row_in_array(point, self.X)
+
+            if flag:
+                index = get_index(point, self.X)
                 result[i] = self.y[index]
             else:
-                weights = np.array([1/np.linalg.norm(points - self.X[j])**self.exponent for j in range(len(self.X))])
+                weights = np.array([1/np.linalg.norm(point - self.X[j])**self.exponent for j in range(len(self.X))])
                 result[i] = np.multiply(self.y, weights).sum()/(weights.sum())
         self.result = result
-        return result
+        return self.result
 
 
 
