@@ -13,13 +13,13 @@ class GaussianProcess(Base):
 
     def __init__(self, resolution="standard", coordinate_type="Euclidean", **kwargs):
         super().__init__(resolution, coordinate_type)
-        self.gp = GaussianProcessRegressor(normalize_y=True, kernel=Matern())
+        self.reg = GaussianProcessRegressor(normalize_y=True, kernel=Matern())
 
     def _fit(self, X, y):
         """Function for fitting.
         This function is not supposed to be called directly.
         """
-        self.gp.fit(X, y)
+        self.reg.fit(X, y)
         return self
 
     def _predict_grid(self, x1lim, x2lim):
@@ -34,10 +34,10 @@ class GaussianProcess(Base):
         x1 = np.linspace(x1min, x1max, self.resolution)
         x2 = np.linspace(x2min, x2max, self.resolution)
         X1, X2 = np.meshgrid(x1, x2)
-        return self.gp.predict(np.array([X1.ravel(), X2.ravel()]).T)
+        return self.reg.predict(np.asarray([X1.ravel(), X2.ravel()]).T)
 
     def _predict(self, X):
         """Function for interpolation on specific points.
         This function is not supposed to be called directly.
         """
-        return self.gp.predict(X)
+        return self.reg.predict(X)

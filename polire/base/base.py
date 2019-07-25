@@ -102,6 +102,9 @@ class Base:
         # calling child specific _predict_grid method
         return self._predict_grid(x1lim, x2lim)
 
+    def __repr__(self):
+        return self.__class__.__name__
+
     def _fit(self, X, y):
         raise NotImplementedError
     def _predict_grid(self, x1lim, x2lim):
