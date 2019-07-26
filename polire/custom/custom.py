@@ -1,21 +1,43 @@
 import numpy as np
-import xgboost
 
 from ..base import Base
+from ..utils import RESOLUTION_DOC, COORDINATE_DOC
+# common docstring across classes
 
 
-class XGB(Base):
-    """
-    Class to interpolate by fitting a XGBoost Regressor to given
-    data.
+class CustomInterpolator(Base):
+    f"""
+    Class to interpolate by fitting a sklearn type Regressor to
+    the given data.
+
+    Parameters
+    ----------
+    regressor: class definition,
+        This variable is used to pass in the Regressor we would like
+        to use for interpolation. The regressor sould be sklearn type
+        regressor. Example from sklearn.ensemble -> RandomForestRegressor
+    
+    {RESOLUTION_DOC}
+
+    {COORDINATE_DOC}
+    
+    reg_kwargs: dict, optional
+        This is a dictionary that is passed into the Regressor initialization.
+        Use this to change the behaviour of the passed regressor. Default = empty dict
+
+    Attributes
+    ----------
+    reg : object
+        Object of the `regressor` class passed.
     """
 
     def __init__(self,
-    n_estimators=100,
+    regressor,
     resolution="standard", 
-    coordinate_type="Euclidean", **kwargs):
+    coordinate_type="Euclidean",
+    reg_kwargs={}):
         super().__init__(resolution, coordinate_type)
-        self.reg = xgboost.XGBRegressor(n_estimators=n_estimators)
+        self.reg = regressor(**reg_kwargs)
 
     def _fit(self, X, y):
         """Function for fitting.
@@ -43,3 +65,6 @@ class XGB(Base):
         This function is not supposed to be called directly.
         """
         return self.reg.predict(X)
+
+    def __repr__(self):
+        return (self.__class__.__name__+'.'+self.reg.__class__.__name__)
