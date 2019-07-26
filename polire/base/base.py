@@ -100,7 +100,8 @@ class Base:
         assert self.x2max_d <= x2max, "Extrapolation not supported"
 
         # calling child specific _predict_grid method
-        return self._predict_grid(x1lim, x2lim)
+        pred_y = self._predict_grid(x1lim, x2lim)
+        return pred_y.reshape(self.resolution, self.resolution)
 
     def __repr__(self):
         return self.__class__.__name__
