@@ -8,6 +8,8 @@ import xgboost
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.neighbors import KNeighborsRegressor
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.gaussian_process.kernels import Matern
 
 # sample data
 X = [[0, 0], [0, 3], [3, 0], [3, 3]]
@@ -21,7 +23,10 @@ for r in [
     CustomInterpolator(LinearRegression, 
                        reg_kwargs={'normalize' : True}),
     CustomInterpolator(KNeighborsRegressor,
-                       reg_kwargs={'n_neighbors': 3})
+                       reg_kwargs={'n_neighbors': 3}),
+    CustomInterpolator(GaussianProcessRegressor,
+                       reg_kwargs={'normalize_y': True, 
+                       'kernel': Matern()})
     ]:
 
     r.fit(X, y)
