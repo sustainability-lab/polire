@@ -5,7 +5,7 @@ resolution: str, optional
 """
 
 COORDINATE_DOC = """
-resolution: str, optional
+coordinate_type: str, optional
     Coordinate system to use.
     Default: Euclidean
 """
