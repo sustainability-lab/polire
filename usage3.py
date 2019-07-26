@@ -23,7 +23,8 @@ for r in [
     CustomInterpolator(LinearRegression, 
                        reg_kwargs={'normalize' : True}),
     CustomInterpolator(KNeighborsRegressor,
-                       reg_kwargs={'n_neighbors': 3}),
+                       reg_kwargs={'n_neighbors': 3,
+                       'weights': 'distance'}),
     CustomInterpolator(GaussianProcessRegressor,
                        reg_kwargs={'normalize_y': True, 
                        'kernel': Matern()})
