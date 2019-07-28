@@ -9,10 +9,9 @@ class SpatialAverage(Base):
     data.
     """
 
-    def __init__(self,
-    radius=100,
-    resolution="standard", 
-    coordinate_type="Euclidean", **kwargs):
+    def __init__(
+        self, radius=100, resolution="standard", coordinate_type="Euclidean", **kwargs
+    ):
         super().__init__(resolution, coordinate_type)
         self.radius = radius
 
@@ -31,7 +30,7 @@ class SpatialAverage(Base):
         # getting the boundaries for interpolation
         x1min, x1max = x1lim
         x2min, x2max = x2lim
-        
+
         # building the grid
         x1 = np.linspace(x1min, x1max, self.resolution)
         x2 = np.linspace(x2min, x2max, self.resolution)

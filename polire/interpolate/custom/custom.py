@@ -2,6 +2,7 @@ import numpy as np
 
 from ..base import Base
 from ...utils import RESOLUTION_DOC, COORDINATE_DOC
+
 # common docstring across classes
 
 
@@ -31,11 +32,13 @@ class CustomInterpolator(Base):
         Object of the `regressor` class passed.
     """
 
-    def __init__(self,
-    regressor,
-    resolution="standard", 
-    coordinate_type="Euclidean",
-    reg_kwargs={}):
+    def __init__(
+        self,
+        regressor,
+        resolution="standard",
+        coordinate_type="Euclidean",
+        reg_kwargs={},
+    ):
         super().__init__(resolution, coordinate_type)
         self.reg = regressor(**reg_kwargs)
 
@@ -53,7 +56,7 @@ class CustomInterpolator(Base):
         # getting the boundaries for interpolation
         x1min, x1max = x1lim
         x2min, x2max = x2lim
-        
+
         # building the grid
         x1 = np.linspace(x1min, x1max, self.resolution)
         x2 = np.linspace(x2min, x2max, self.resolution)
@@ -67,4 +70,4 @@ class CustomInterpolator(Base):
         return self.reg.predict(X)
 
     def __repr__(self):
-        return (self.__class__.__name__+'.'+self.reg.__class__.__name__)
+        return self.__class__.__name__ + "." + self.reg.__class__.__name__

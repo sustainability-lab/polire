@@ -3,13 +3,14 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
-from polire.interpolate import (Random, Trend, BSpline, Idw)
+from polire.interpolate import Random, Trend, BSpline, Idw
 
 # sample data
 X = [[0, 0], [0, 3], [3, 0], [3, 3]]
 y = [0, 1.5, 1.5, 3]
 X = np.array(X)
 y = np.array(y)
+
 
 def test_grid():
     # Gridded interpolation testing
@@ -21,17 +22,30 @@ def test_grid():
         plt.title(r)
         plt.show()
         plt.close()
+
+
 def test_point():
     # Pointwise interpolation testing
     for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw()]:
-        r.fit(X,y)
-        test_data = [[0,0],[0,3],[3,0],[3,3],[1,1],[1.5,1.5],[2,2],[2.5,2.5],[4,4]]
+        r.fit(X, y)
+        test_data = [
+            [0, 0],
+            [0, 3],
+            [3, 0],
+            [3, 3],
+            [1, 1],
+            [1.5, 1.5],
+            [2, 2],
+            [2.5, 2.5],
+            [4, 4],
+        ]
         y_pred = r.predict(np.array(test_data))
         print(r)
         print(y_pred)
-if __name__=='__main__':
+
+
+if __name__ == "__main__":
     print("Testing Gridded Interpolation")
     test_grid()
     print("\nTesting Pointwise Interpolation")
     test_point()
-    

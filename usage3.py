@@ -20,15 +20,14 @@ y = np.array(y)
 for r in [
     CustomInterpolator(xgboost.XGBRegressor),
     CustomInterpolator(RandomForestRegressor),
-    CustomInterpolator(LinearRegression, 
-                       reg_kwargs={'normalize' : True}),
-    CustomInterpolator(KNeighborsRegressor,
-                       reg_kwargs={'n_neighbors': 3,
-                       'weights': 'distance'}),
-    CustomInterpolator(GaussianProcessRegressor,
-                       reg_kwargs={'normalize_y': True, 
-                       'kernel': Matern()})
-    ]:
+    CustomInterpolator(LinearRegression, reg_kwargs={"normalize": True}),
+    CustomInterpolator(
+        KNeighborsRegressor, reg_kwargs={"n_neighbors": 3, "weights": "distance"}
+    ),
+    CustomInterpolator(
+        GaussianProcessRegressor, reg_kwargs={"normalize_y": True, "kernel": Matern()}
+    ),
+]:
 
     r.fit(X, y)
     Z = r.predict_grid((0, 3), (0, 3)).reshape(100, 100)
