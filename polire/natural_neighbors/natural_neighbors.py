@@ -58,6 +58,7 @@ class Natural_neighbor(Base):
 	This is for contributors:
 		The way in which part of the code is used is in the assumption that
 		we use the data's ordering to find its voronoi partitions. 
+
 	References
 	----------
 	[1]  Sibson, R. (1981). "A brief description of natural neighbor interpolation (Chapter 2)". In V. Barnett (ed.). Interpolating Multivariate Data. Chichester: John Wiley. pp. 21–36.
@@ -127,36 +128,41 @@ class Natural_neighbor(Base):
 		result = np.zeros(len(X))
 
 		for index in range(len(X)):
-			vor = deepcopy(self.voronoi)
-			vor.add_points(np.array([X[index]]))
-			# We exploit the incremental processing of Scipy's Voronoi.
-			# We create a copy to ensure that the original copy is preserved.
-			new_regions = vor.regions
-			new_vertices = vor.vertices
-			final_regions = []
+			if X[index] in self.X:
+				# Check if query data point already exists
+				result[index] = self.y[index]
+			else:
+				vor = deepcopy(self.voronoi)
+				vor.add_points(np.array([X[index]]))
+				# We exploit the incremental processing of Scipy's Voronoi.
+				# We create a copy to ensure that the original copy is preserved.
+				new_regions = vor.regions
+				new_vertices = vor.vertices
+				final_regions = []
 
-			for i in new_regions:
-				if i!=[] and -1 not in i:
-					final_regions.append(i)
+				for i in new_regions:
+					if i!=[] and -1 not in i:
+						final_regions.append(i)
 
-			new = [] # this stores the newly created voronoi partitions
-			for i in range(len(new_vertices)):
-				if new_vertices[i] not in self.vertices:
-					new.append(new_vertices[i])
-			new = np.array(new)
+				new = [] # this stores the newly created voronoi partitions
+				for i in range(len(new_vertices)):
+					if new_vertices[i] not in self.vertices:
+						new.append(new_vertices[i])
+				new = np.array(new)
 
-			weights = {}	#Weights that we use for interpolation
+				weights = {}	#Weights that we use for interpolation
 
-			new_polygon = Polygon(order_poly(new))
-			new_polygon_area = new_polygon.area
+				new_polygon = Polygon(order_poly(new))
+				new_polygon_area = new_polygon.area
 
-			for i in self.vertex_poly_map:
-				if new_polygon.intersects(vertex_poly_map[i]):
-					weights[i] = (new_polygon.intersection(self.vertex_poly_map[i])).area/new_polygon_area
+				flag = -1
+				for i in self.vertex_poly_map:
+					if new_polygon.intersects(vertex_poly_map[i]):
+						weights[i] = (new_polygon.intersection(self.vertex_poly_map[i])).area/new_polygon_area
 
-			prediction = np.array([self.y[i]*weights[i] for i in weights]).sum()
-			result[index] = prediction
-			del vor, weights, new_polygon, new_polygon_area
+				prediction = np.array([self.y[i]*weights[i] for i in weights]).sum()
+				result[index] = prediction
+				del vor, weights, new_polygon, new_polygon_area
 
 		return result
 
