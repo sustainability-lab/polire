@@ -1,7 +1,7 @@
 import numpy as np
 
 from ..base import Base
-from ..utils import RESOLUTION_DOC, COORDINATE_DOC
+from ...utils import RESOLUTION_DOC, COORDINATE_DOC
 # common docstring across classes
 
 

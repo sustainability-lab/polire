@@ -3,7 +3,7 @@
 This is a module for IDW Spatial Interpolation
 """
 import numpy as np
-from ..utils import gridding
+from ...utils import gridding
 from ..base import Base
 from copy import deepcopy
 

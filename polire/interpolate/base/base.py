@@ -1,4 +1,4 @@
-from ..constants import RESOLUTION
+from ...constants import RESOLUTION
 
 
 class Base:

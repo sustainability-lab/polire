@@ -3,7 +3,7 @@ from scipy.interpolate import bisplrep, bisplev
 
 
 from ..base import Base
-from ..utils import find_closest
+from ...utils import find_closest
 
 
 class BSpline(Base):
