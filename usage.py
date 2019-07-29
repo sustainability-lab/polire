@@ -17,7 +17,7 @@ def test_grid():
     # Gridded interpolation testing
     for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw()]:
         r.fit(X, y)
-        y_pred = r.predict_grid((0, 3), (0, 3))
+        y_pred = r.predict_grid()
         Z = y_pred
         sns.heatmap(Z)
         plt.title(r)
@@ -45,6 +45,7 @@ def test_point():
         print(y_pred)
 
 def test_nn():
+    print("\nNatural Neighbors - Point Wise")
     nn = Natural_neighbor()
     df = pd.read_csv("testdata/30-03-18.csv")
     X = np.array(df[['longitude', 'latitude']])
@@ -56,6 +57,18 @@ def test_nn():
     ]
     y_pred = nn.predict(np.array(test_data))
     print(y_pred)
+    del nn 
+    print("\nNatural Neighbors - Entire Grid")
+    # Suggested by Apoorv as a temporary fix
+    # Patient pays
+    nn = Natural_neighbor()
+    nn.fit(X,y)
+    y_pred = nn.predict_grid()
+    print(y_pred)
+    sns.heatmap(y_pred)
+    plt.title(nn)
+    plt.show()
+    plt.close()
 
 
 

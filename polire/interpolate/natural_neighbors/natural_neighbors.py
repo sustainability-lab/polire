@@ -130,19 +130,33 @@ class Natural_neighbor(Base):
             plt.show()
             self.display = False
 
+        return self
+
     def _predict_grid(self, x1lim, x2lim):
-        raise NotImplementedError
+        """ Gridded interpolation for natural neighbors interpolation. This function should not
+        be called directly. 
+        """
+        lims = (*x1lim, *x2lim)
+        x1min, x1max, x2min, x2max = lims
+        x1 = np.linspace(x1min, x1max, self.resolution)
+        x2 = np.linspace(x2min, x2max, self.resolution)
+        X1, X2 = np.meshgrid(x1, x2)
+        return self._predict(np.array([X1.ravel(), X2.ravel()]).T)
 
     def _predict(self, X):
         """The function taht is called to predict the interpolated data in Natural Neighbors
-        interpolation. This should not be called directly.
+        interpolation. This should not be called directly. 
+        If this method returns None, then we cannot interpolate because of the formed Voronoi
+        Tesselation
         """
         result = np.zeros(len(X))
-
+        ## Potentially create so many class objects as the 
+        ## length of the to be predicted array
+        ## not a bad idea if memory is not a constraints
         for index in range(len(X)):
 
             if is_row_in_array(X[index], self.X):
-                
+
                 idx = get_index(X[index], self.X)
                 # Check if query data point already exists
                 result[index] = self.y[idx]
@@ -169,16 +183,18 @@ class Natural_neighbor(Base):
                     if new_vertices[i] not in self.vertices:
                         new.append(new_vertices[i])
                 new = np.array(new)
-                if len(new)<=3:
+                if len(new)<3:
                     ## We need atleast a traingle to interpolate
                     ## Three new voronoi vertices form a triangle
                     print("Can't interpolate because of unbounded Voronoi Partition")
-                    return None
+                    print("Data is ", X[index])
+                    result[index] = None
+                    continue
+
                 weights = {}    #Weights that we use for interpolation
                 new_polygon = Polygon(order_poly(new))
                 new_polygon_area = new_polygon.area
 
-                flag = -1
                 for i in self.vertex_poly_map:
                     if new_polygon.intersects(self.vertex_poly_map[i]):
                         weights[i] = (new_polygon.intersection(self.vertex_poly_map[i])).area/new_polygon_area
