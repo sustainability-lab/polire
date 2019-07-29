@@ -63,8 +63,9 @@ def test_nn():
 
 
 if __name__ == "__main__":
-    # print("Testing Gridded Interpolation")
-    # test_grid()
-    # print("\nTesting Pointwise Interpolation")
-    # test_point()
+    print("Testing Gridded Interpolation")
+    test_grid()
+    print("\nTesting Pointwise Interpolation")
+    test_point()
+    print("\nTesting Natural Neighbors")
     test_nn()

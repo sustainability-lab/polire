@@ -140,11 +140,13 @@ class Natural_neighbor(Base):
         result = np.zeros(len(X))
 
         for index in range(len(X)):
-            print(X[index])
+
             if is_row_in_array(X[index], self.X):
+                
                 idx = get_index(X[index], self.X)
                 # Check if query data point already exists
                 result[index] = self.y[idx]
+
             else:
                 #QHull object can't be pickled. Deepcopy doesn't work. 
                 # So we need to fit the model for each and every query data point.
@@ -175,9 +177,12 @@ class Natural_neighbor(Base):
                 weights = {}    #Weights that we use for interpolation
                 new_polygon = Polygon(order_poly(new))
                 new_polygon_area = new_polygon.area
+
+                flag = -1
                 for i in self.vertex_poly_map:
                     if new_polygon.intersects(self.vertex_poly_map[i]):
                         weights[i] = (new_polygon.intersection(self.vertex_poly_map[i])).area/new_polygon_area
+
                 prediction = np.array([self.y[i]*weights[i] for i in weights]).sum()
                 result[index] = prediction
                 del vor, weights, new_polygon, new_polygon_area
