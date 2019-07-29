@@ -1,4 +1,4 @@
-from ..constants import RESOLUTION
+from ...constants import RESOLUTION
 
 
 class Base:
@@ -108,7 +108,9 @@ class Base:
 
     def _fit(self, X, y):
         raise NotImplementedError
+
     def _predict_grid(self, x1lim, x2lim):
         raise NotImplementedError
+
     def _predict(self, X):
         raise NotImplementedError

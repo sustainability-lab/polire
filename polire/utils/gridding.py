@@ -6,6 +6,7 @@
 import numpy as np
 from scipy import spatial
 
+
 def make_grid(self, x, y, res, offset=0.2):
     """ This function returns the grid to perform interpolation on.
        This function is used inside the fit() attribute of the idw class.
@@ -30,13 +31,14 @@ def make_grid(self, x, y, res, offset=0.2):
     yy : {array-like, 2D}, shape (n_samples, n_samples)
     """
     y_min = y.min() - offset
-    y_max = y.max()+ offset
-    x_min = x.min()-offset
-    x_max = x.max()+offset
-    x_arr = np.linspace(x_min,x_max, res)
-    y_arr = np.linspace(y_min,y_max, res)
-    xx,yy = np.meshgrid(x_arr,y_arr)  
-    return xx,yy
+    y_max = y.max() + offset
+    x_min = x.min() - offset
+    x_max = x.max() + offset
+    x_arr = np.linspace(x_min, x_max, res)
+    y_arr = np.linspace(y_min, y_max, res)
+    xx, yy = np.meshgrid(x_arr, y_arr)
+    return xx, yy
+
 
 def find_closest(grid, X, l=2):
     """Function used to find the indices of the grid points closest
@@ -61,10 +63,10 @@ def find_closest(grid, X, l=2):
 
     ref - https://stackoverflow.com/questions/10818546/finding-index-of-nearest-point-in-numpy-arrays-of-x-and-y-coordinates
     """
-    points = np.asarray([grid[0].ravel(), grid[1].ravel()]).T # ravel is inplace
+    points = np.asarray([grid[0].ravel(), grid[1].ravel()]).T  # ravel is inplace
     kdtree = spatial.KDTree(points)
-    ixs = [] # for containing the indices of closest points found on grid
-    
+    ixs = []  # for containing the indices of closest points found on grid
+
     for point_ix in range(X.shape[0]):
         point = X[point_ix, :]
         _, ix = kdtree.query(point)
