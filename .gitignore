@@ -8,3 +8,4 @@ build
 dist
 polire.egg-info
 testing usagea.ipynb
+voronoi/
