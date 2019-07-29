@@ -70,15 +70,10 @@ class Idw(Base):
         # X = deepcopy(np.c_[X,y])
 
         X = np.c_[self.X, self.y]
-
-        # Makes the grid. Check for more on the make_grid function inside the utils directory
-        if lims is None:
-            xx, yy = make_grid(self.X, self.y, self.resolution)
-        else:
-            x1min, x1max, x2min, x2max = lims
-            x1 = np.linspace(x1min, x1max, self.resolution)
-            x2 = np.linspace(x2min, x2max, self.resolution)
-            xx, yy = np.meshgrid(x1, x2)
+        x1min, x1max, x2min, x2max = lims
+        x1 = np.linspace(x1min, x1max, self.resolution)
+        x2 = np.linspace(x2min, x2max, self.resolution)
+        xx, yy = np.meshgrid(x1, x2)
 
         new = []
         # This list stores all the tuples that contain points, and the closest point to the point in the 2D Grid that we are concerned with.
