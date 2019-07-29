@@ -35,6 +35,4 @@ class Random(Base):
         """Function for random interpolation.
         This function is not supposed to be called directly.
         """
-        return np.random.uniform(
-            low=self.ymin, high=self.ymax, size=(X.shape[0])
-        )
+        return np.random.uniform(low=self.ymin, high=self.ymax, size=(X.shape[0]))

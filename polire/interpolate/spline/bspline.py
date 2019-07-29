@@ -3,7 +3,7 @@ from scipy.interpolate import bisplrep, bisplev
 
 
 from ..base import Base
-from ..utils import find_closest
+from ...utils import find_closest
 
 
 class BSpline(Base):
@@ -50,7 +50,7 @@ class BSpline(Base):
         x1min, x1max = x1lim
         x2min, x2max = x2lim
 
-        # interpolating over the grid 
+        # interpolating over the grid
         # TODO Relook here, we might expect the result to be transpose
         return bisplev(
             np.linspace(x1min, x1max, self.resolution),
@@ -65,14 +65,12 @@ class BSpline(Base):
         results = []
         for ix in range(X.shape[0]):
             interpolated_y = bisplev(
-                X[ix, 0],
-                X[ix, 1],
-                self.tck
-            ).item() # one value returned
+                X[ix, 0], X[ix, 1], self.tck
+            ).item()  # one value returned
             results.append(interpolated_y)
-        
+
         return np.array(results)
-        
+
         # # form a grid
         # x1 = np.linspace(self.x1min_d, self.x1max_d, self.resolution),
         # x2 = np.linspace(self.x2min_d, self.x2max_d, self.resolution),
@@ -83,7 +81,7 @@ class BSpline(Base):
         #     x1, x2,
         #     self.tck,
         # )
-        
+
         # # find the closest points on the interpolated grid
         # ix = find_closest(grid=(X1, X2), X)
-        # return interpolated_grid[ix] # TODO this can be wrong, must depend on 
+        # return interpolated_grid[ix] # TODO this can be wrong, must depend on
