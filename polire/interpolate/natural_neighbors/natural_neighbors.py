@@ -168,6 +168,7 @@ class Natural_neighbor(Base):
 
                 vor = self.voronoi
                 vor.add_points(np.array([X[index]]))
+                vor.close()
                 # We exploit the incremental processing of Scipy's Voronoi.
                 # We create a copy to ensure that the original copy is preserved.
                 new_regions = vor.regions

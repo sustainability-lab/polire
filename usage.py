@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from polire.interpolate import Random, Trend, BSpline, Idw
-from polire.interpolate import Natural_neighbor
+from polire.interpolate import Random, Trend, BSpline, Idw, Natural_neighbor, Kriging
+
 # sample data
 X = [[0, 0], [0, 3], [3, 0], [3, 3]]
 y = [0, 1.5, 1.5, 3]
@@ -15,8 +15,26 @@ y = np.array(y)
 
 def test_grid():
     # Gridded interpolation testing
-    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw()]:
+    print("\nTesting on small dataset")
+    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging()]:
         r.fit(X, y)
+        y_pred = r.predict_grid()
+        Z = y_pred
+        sns.heatmap(Z)
+        plt.title(r)
+        plt.show()
+        plt.close()
+    print("\nTesting completed on a small dataset\n")
+
+
+    print("\nTesting on a reasonable dataset")
+
+    df = pd.read_csv("testdata/30-03-18.csv")
+    X1 = np.array(df[['longitude', 'latitude']])
+    y1 = np.array(df['value'])
+
+    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging()]:
+        r.fit(X1, y1)
         y_pred = r.predict_grid()
         Z = y_pred
         sns.heatmap(Z)
@@ -25,9 +43,10 @@ def test_grid():
         plt.close()
 
 
+
 def test_point():
     # Pointwise interpolation testing
-    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw()]:
+    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging()]:
         r.fit(X, y)
         test_data = [
             [0, 0],
@@ -60,7 +79,7 @@ def test_nn():
     del nn 
     print("\nNatural Neighbors - Entire Grid")
     # Suggested by Apoorv as a temporary fix
-    # Patient pays
+    # Patience pays
     nn = Natural_neighbor()
     nn.fit(X,y)
     y_pred = nn.predict_grid()
@@ -69,7 +88,6 @@ def test_nn():
     plt.title(nn)
     plt.show()
     plt.close()
-
 
 
     
