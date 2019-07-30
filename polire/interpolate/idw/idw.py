@@ -20,7 +20,7 @@ def get_index(row, arr):
 
 
 class Idw(Base):
-    """ A class that is declared for performing IDW Interpolation.
+    """A class that is declared for performing IDW Interpolation.
     For more information on how this method works, kindly refer to
     https://en.wikipedia.org/wiki/Inverse_distance_weighting
 
@@ -58,7 +58,7 @@ class Idw(Base):
         self.result = None
 
     def _fit(self, X, y):
-        """ This function is for the IDW Class.
+        """This function is for the IDW Class.
         This is not expected to be called directly
         """
         self.X = X
@@ -146,7 +146,7 @@ class Idw(Base):
         return self.interpolated_values
 
     def _predict(self, X):
-        """ The function call to predict using the interpolated data
+        """The function call to predict using the interpolated data
         in IDW interpolation. This should not be called directly.
         """
         result = np.zeros(X.shape[0])
