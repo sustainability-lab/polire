@@ -6,6 +6,7 @@ import pandas as pd
 
 from polire.interpolate import Random, Trend, BSpline, Idw
 from polire.interpolate import Natural_neighbor
+from polire.interpolate import Kriging
 # sample data
 X = [[0, 0], [0, 3], [3, 0], [3, 3]]
 y = [0, 1.5, 1.5, 3]
@@ -15,7 +16,7 @@ y = np.array(y)
 
 def test_grid():
     # Gridded interpolation testing
-    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw()]:
+    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging()]:
         r.fit(X, y)
         y_pred = r.predict_grid()
         Z = y_pred
@@ -27,7 +28,7 @@ def test_grid():
 
 def test_point():
     # Pointwise interpolation testing
-    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw()]:
+    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging()]:
         r.fit(X, y)
         test_data = [
             [0, 0],
@@ -60,7 +61,7 @@ def test_nn():
     del nn 
     print("\nNatural Neighbors - Entire Grid")
     # Suggested by Apoorv as a temporary fix
-    # Patient pays
+    # Patience pays
     nn = Natural_neighbor()
     nn.fit(X,y)
     y_pred = nn.predict_grid()
@@ -69,7 +70,6 @@ def test_nn():
     plt.title(nn)
     plt.show()
     plt.close()
-
 
 
     
@@ -82,3 +82,5 @@ if __name__ == "__main__":
     test_point()
     print("\nTesting Natural Neighbors")
     test_nn()
+    print("\nTesting Kriging Interpolation")
+    test_kriging()

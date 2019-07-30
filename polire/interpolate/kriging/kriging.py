@@ -8,7 +8,7 @@ from pykrige.uk import UniversalKriging
 
 
 class Kriging(Base):
-     """ A class that is declared for performing Kriging interpolation.
+    """A class that is declared for performing Kriging interpolation.
     Kriging interpolation (usually) works on the principle of finding the 
     best unbiased predictor. Ordinary Kriging, for an example, involves finding out the
     best unbaised linear predictor. 
@@ -33,17 +33,18 @@ class Kriging(Base):
 
     require_variance : Boolean, optional
     This variable returns the uncertainity in the interpolated values using Kriging
-    interpolation.
+    interpolation. If this is True, kindly call the attribute return_variance, of this class
+    to retreive the computed variances. False is the default value.d
     """
 
     def __init__(
-    self,
-    type = "Ordinary",
-    plotting = False,
-    variogram_model = 'linear',
-    require_variance = False,
-    resolution = "standard",
-    coordinate_type = "Eucledian",
+        self,
+        type = "Ordinary",
+        plotting = False,
+        variogram_model = 'linear',
+        require_variance = False,
+        resolution = "standard",
+        coordinate_type = "Eucledian",
     ):
 
         super().__init__(resolution, coordinate_type)
@@ -74,15 +75,18 @@ class Kriging(Base):
                 coordinates_type = self.coordinate_type
             )
 
-        if self.type == "Universal":
+        elif self.type == "Universal":
             self.uk = UniversalKriging(
                 X[:,0],
                 X[:,1],
                 y,
                 variogram_model = self.variogram_model,
                 enable_plotting = self.plotting,
-                coordinates_type = self.coordinate_type
             )
+
+        else:
+            raise ValueError("Choose either Universal or Ordinary - Given argument is neither")
+
 
         return self
 
@@ -95,14 +99,14 @@ class Kriging(Base):
         x2 = np.linspace(x2min, x2max, self.resolution)
 
         if self.ok is not None:
-            predictions, self.variance = self.ok.execute(
+                predictions, self.variance = self.ok.execute(
                 style = 'grid',
                 xpoints = x1,
                 ypoints = x2
                 )
         
-        if self.uk in not None:
-            predictions, self.variance = self.ok.execute(
+        else:
+                predictions, self.variance = self.uk.execute(
                 style = 'grid',
                 xpoints = x1,
                 ypoints = x2
@@ -114,14 +118,14 @@ class Kriging(Base):
         """This function should be called to return the interpolated data in kriging
         in a pointwise manner. This method shouldn't be called directly."""
         if self.ok is not None:
-            predictions, self.okvariance = self.ok.execute(
+                predictions, self.variance = self.ok.execute(
                 style = 'points',
                 xpoints = X[:,0],
                 ypoints = X[:,1]
                 )
         
-        if self.uk in not None:
-            predictions, self.ukvariance = self.ok.execute(
+        else:
+                predictions, self.variance = self.uk.execute(
                 style = 'points',
                 xpoints = X[:,0],
                 ypoints = X[:,1]
@@ -136,10 +140,10 @@ class Kriging(Base):
             return self.variance
 
         else:
-            print("Variance not asked for while instantiating the object")
+            print("Variance not asked for, while instantiating the object. Returning None")
             return None
 
-    
+
 
 
 
