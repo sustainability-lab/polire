@@ -154,7 +154,7 @@ class Natural_neighbor(Base):
         ## length of the to be predicted array
         ## not a bad idea if memory is not a constraints
         for index in range(len(X)):
-            print(index)
+
             if is_row_in_array(X[index], self.X):
 
                 idx = get_index(X[index], self.X)
