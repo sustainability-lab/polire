@@ -99,18 +99,18 @@ class Kriging(Base):
         x2 = np.linspace(x2min, x2max, self.resolution)
 
         if self.ok is not None:
-                predictions, self.variance = self.ok.execute(
-                style = 'grid',
-                xpoints = x1,
-                ypoints = x2
-                )
+            predictions, self.variance = self.ok.execute(
+            style = 'grid',
+            xpoints = x1,
+            ypoints = x2
+            )
         
         else:
-                predictions, self.variance = self.uk.execute(
-                style = 'grid',
-                xpoints = x1,
-                ypoints = x2
-                )
+            predictions, self.variance = self.uk.execute(
+            style = 'grid',
+            xpoints = x1,
+            ypoints = x2
+            )
             
         return  predictions
 
@@ -118,18 +118,18 @@ class Kriging(Base):
         """This function should be called to return the interpolated data in kriging
         in a pointwise manner. This method shouldn't be called directly."""
         if self.ok is not None:
-                predictions, self.variance = self.ok.execute(
-                style = 'points',
-                xpoints = X[:,0],
-                ypoints = X[:,1]
-                )
+            predictions, self.variance = self.ok.execute(
+            style = 'points',
+            xpoints = X[:,0],
+            ypoints = X[:,1]
+            )
         
         else:
-                predictions, self.variance = self.uk.execute(
-                style = 'points',
-                xpoints = X[:,0],
-                ypoints = X[:,1]
-                )
+            predictions, self.variance = self.uk.execute(
+            style = 'points',
+            xpoints = X[:,0],
+            ypoints = X[:,1]
+            )
             
         return  predictions
 
