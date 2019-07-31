@@ -90,7 +90,6 @@ class Natural_neighbor(Base):
         self.result = None
         self.voronoi = None
         self.vertices = None #This variable stored the voronoi partition's vertices
-        self.regions = [] # This variable stores the original Voronoi regions
         self.vertex_poly_map = dict() # This variable stores the polygon to data point map
         self.display = display
 
@@ -102,23 +101,20 @@ class Natural_neighbor(Base):
         self.y = y
         self.voronoi = Voronoi(X, incremental = True)
         self.vertices = self.voronoi.vertices
-        regions = self.voronoi.regions
-
-        for i in regions:
-            if i!=[] and -1 not in i:
-                # -1 corresponds to unbounded region - we can't have this in interpolation
-                # and the function returns an empty list anyways
-                self.regions.append(i)
 
         self.vertex_poly_map = {i:0 for i in range(len(X))}
         
-        # Assigning each data point to its corresponding polygon
-        for i in range(len(X)):
-            point = Point(X[i,0], X[i,1])
-            for j in range(len(self.regions)):
-                p = Polygon(order_poly(self.voronoi.vertices[self.regions[j]]))
-                if p.contains(point):
-                    self.vertex_poly_map[i] = p
+
+        for i in range(len(self.X)):
+            index = np.where(self.voronoi.point_region == i)[0][0]
+            point = Point(self.X[index])
+            region = self.voronoi.regions[i]
+            if -1 not in region and region!=[]:
+                # -1 corresponds to unbounded region - we can't have this in interpolation
+                # and the function returns an empty list anyways
+                # at least in the case of non-incremental NN
+                p = Polygon(order_poly(self.vertices[region]))
+                self.vertex_poly_map[index] = p
         # Remove all the data points that do not contribute to Nearest Neighhbor interpolation
         for i in range(len(self.vertex_poly_map)):
             if self.vertex_poly_map[i]==0:
@@ -162,7 +158,7 @@ class Natural_neighbor(Base):
                 result[index] = self.y[idx]
 
             else:
-                #QHull object can't be pickled. Deepcopy doesn't work. 
+                #QHull object can't bgit ae pickled. Deepcopy doesn't work. 
                 # So we need to fit the model for each and every query data point.
                 self._fit(self.X, self.y)
 
@@ -187,9 +183,7 @@ class Natural_neighbor(Base):
                 if len(new)<3:
                     ## We need atleast a traingle to interpolate
                     ## Three new voronoi vertices form a triangle
-                    print("Can't interpolate because of unbounded Voronoi Partition")
-                    print("Data is ", X[index])
-                    result[index] = None
+                    result[index] = np.nan
                     continue
 
                 weights = {}    #Weights that we use for interpolation
