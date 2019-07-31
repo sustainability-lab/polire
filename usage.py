@@ -16,7 +16,7 @@ y = np.array(y)
 def test_grid():
     # Gridded interpolation testing
     print("\nTesting on small dataset")
-    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging()]:
+    for r in [Random(), SpatialAverage(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging()]:
         r.fit(X, y)
         y_pred = r.predict_grid()
         Z = y_pred
