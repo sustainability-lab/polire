@@ -162,7 +162,7 @@ class Idw(Base):
             else:
                 weights = np.array(
                     [
-                        1 / np.linalg.norm(point - self.X[j]) ** self.exponent
+                        1 / (np.linalg.norm(point - self.X[j]) ** self.exponent)
                         for j in range(len(self.X))
                     ]
                 )
