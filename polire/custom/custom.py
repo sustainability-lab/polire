@@ -1,13 +1,10 @@
 import numpy as np
 
 from ..interpolate.base import Base
-from ..utils import RESOLUTION_DOC, COORDINATE_DOC
-
-# common docstring across classes
 
 
 class CustomInterpolator(Base):
-    f"""
+    """
     Class to interpolate by fitting a sklearn type Regressor to
     the given data.
 
@@ -17,10 +14,6 @@ class CustomInterpolator(Base):
         This variable is used to pass in the Regressor we would like
         to use for interpolation. The regressor sould be sklearn type
         regressor. Example from sklearn.ensemble -> RandomForestRegressor
-    
-    {RESOLUTION_DOC}
-
-    {COORDINATE_DOC}
     
     reg_kwargs: dict, optional
         This is a dictionary that is passed into the Regressor initialization.

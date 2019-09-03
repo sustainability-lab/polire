@@ -66,7 +66,7 @@ class Base:
         # calling child specific _predict method
         return self._predict(X)
 
-    def predict_grid(self, x1lim=None, x2lim=None):
+    def predict_grid(self, x1lim=None, x2lim=None, support_extrapolation=True):
         """Function to interpolate data on a grid of given size.
         .
         Parameters
@@ -94,10 +94,11 @@ class Base:
         (x2min, x2max) = x2lim
 
         # extrapolation isn't supported yet
-        assert self.x1min_d >= x1min, "Extrapolation not supported"
-        assert self.x1max_d <= x1max, "Extrapolation not supported"
-        assert self.x2min_d >= x2min, "Extrapolation not supported"
-        assert self.x2max_d <= x2max, "Extrapolation not supported"
+        if not support_extrapolation:
+            assert self.x1min_d >= x1min, "Extrapolation not supported"
+            assert self.x1max_d <= x1max, "Extrapolation not supported"
+            assert self.x2min_d >= x2min, "Extrapolation not supported"
+            assert self.x2max_d <= x2max, "Extrapolation not supported"
 
         # calling child specific _predict_grid method
         pred_y = self._predict_grid(x1lim, x2lim)

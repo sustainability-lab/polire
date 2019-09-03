@@ -19,12 +19,13 @@ class Trend(Base):
         If you would like to fit to your custom function,
         _set order to None_ and then pass a functor.
         See Example functor passing below
-        ```python
-        def func(X, a, b, c):
-            x1, x2 = X
-            return np.log(a) + b*np.log(x1) + c*np.log(x2)
-        t = Trend(order=None, custom_poly=func)
-        ```
+        .. highlight:: python
+        .. code-block:: python
+            def func(X, a, b, c):
+                x1, x2 = X
+                return np.log(a) + b*np.log(x1) + c*np.log(x2)
+            t = Trend(order=None, custom_poly=func)
+            ...
     """
 
     def __init__(
