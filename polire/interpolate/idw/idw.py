@@ -1,4 +1,4 @@
-"""
+r"""
 This is a module for IDW Spatial Interpolation
 """
 import numpy as np
@@ -166,6 +166,6 @@ class Idw(Base):
                         for j in range(len(self.X))
                     ]
                 )
-                result[i] = np.multiply(self.y, weights).sum() / (weights.sum())
+                result[i] = np.multiply(self.y.reshape(self.y.shape[0],), weights).sum() / (weights.sum())
         self.result = result
         return self.result
