@@ -11,6 +11,9 @@ ver_file = os.path.join('polire', '_version.py')
 with open(ver_file) as f:
     exec(f.read())
 
+with open(os.path.join(HERE, "requirements.txt"), encoding="utf-8") as f:
+    REQ = f.read().splitlines()
+
 DISTNAME = 'polire'
 DESCRIPTION = 'A collection of interpolation methods.'
 with codecs.open('README.md', encoding='utf-8-sig') as f:
@@ -21,7 +24,7 @@ URL = 'https://sustainability-lab.github.io/polire'
 LICENSE = 'new BSD'
 DOWNLOAD_URL = 'https://sustainability-lab.github.io/polire'
 VERSION = __version__
-INSTALL_REQUIRES = ['numpy', 'scipy', 'scikit-learn']
+INSTALL_REQUIRES = REQ
 CLASSIFIERS = ['Intended Audience :: Science/Research',
                'Intended Audience :: Developers',
                'License :: OSI Approved',
