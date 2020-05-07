@@ -11,6 +11,8 @@ ver_file = os.path.join('polire', '_version.py')
 with open(ver_file) as f:
     exec(f.read())
 
+HERE = os.path.abspath(os.path.dirname(__file__))
+
 with open(os.path.join(HERE, "requirements.txt"), encoding="utf-8") as f:
     REQ = f.read().splitlines()
 
