@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from polire.interpolate import Random, Trend, BSpline, Idw, Natural_neighbor, Kriging
+from polire.interpolate import Random, Trend, BSpline, Idw, Natural_neighbor, Kriging, SpatialAverage
 
 # sample data
 X = [[0, 0], [0, 3], [3, 0], [3, 3]]
