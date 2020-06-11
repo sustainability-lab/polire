@@ -35,6 +35,9 @@ class Kriging(Base):
     This variable returns the uncertainity in the interpolated values using Kriging
     interpolation. If this is True, kindly call the attribute return_variance, of this class
     to retreive the computed variances. False is the default value.d
+    
+	nlags: int, optional
+	Number of lags to be considered for semivariogram. As in PyKrige, we set default to be 6.
     """
 
     def __init__(
@@ -45,6 +48,7 @@ class Kriging(Base):
         require_variance = False,
         resolution = "standard",
         coordinate_type = "Eucledian",
+        nlags = 6
     ):
 
         super().__init__(resolution, coordinate_type)
@@ -56,11 +60,14 @@ class Kriging(Base):
         self.coordinate_type = None
         self.require_variance = require_variance
         self.variance = None
-    
+    	
         if coordinate_type == "Eucledian":
             self.coordinate_type = 'euclidean'
         else:
             self.coordinate_type = 'geographic'
+
+        self.nlags = nlags
+
 
     def _fit(self, X, y):
         """This method of the Kriging Class is used to fit Kriging interpolation model to
@@ -72,7 +79,8 @@ class Kriging(Base):
                 y,
                 variogram_model = self.variogram_model,
                 enable_plotting = self.plotting,
-                coordinates_type = self.coordinate_type
+                coordinates_type = self.coordinate_type,
+                nlags = self.nlags
             )
 
         elif self.type == "Universal":
