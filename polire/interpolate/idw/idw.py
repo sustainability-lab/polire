@@ -2,7 +2,7 @@ r"""
 This is a module for IDW Spatial Interpolation
 """
 import numpy as np
-from ...utils import gridding
+from ...utils.distance import haversine, euclidean
 from ..base import Base
 from copy import deepcopy
 
@@ -49,13 +49,19 @@ class Idw(Base):
 
     """
 
-    def __init__(self, exponent=2, resolution="standard", coordinate_type="Eucledian"):
+    def __init__(self, exponent=2, resolution="standard", coordinate_type="Euclidean"):
         super().__init__(resolution, coordinate_type)
         self.exponent = exponent
         self.interpolated_values = None
         self.X = None
         self.y = None
         self.result = None
+        if self.coordinate_type == 'Geographic':
+            self.distance = haversine
+        elif self.coordinate_type == 'Euclidean':
+            self.distance = euclidean
+        else:
+            raise NotImplementedError("Only Geographic and Euclidean Coordinates are available")
 
     def _fit(self, X, y):
         """This function is for the IDW Class.
@@ -170,7 +176,7 @@ class Idw(Base):
             else:
                 weights = np.array(
                     [
-                        1 / (np.linalg.norm(point - self.X[j]) ** self.exponent)
+                        1 / (self.distance(point, self.X[j]) ** self.exponent)
                         for j in range(len(self.X))
                     ]
                 )
