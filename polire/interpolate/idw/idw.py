@@ -66,84 +66,92 @@ class Idw(Base):
         return self
 
     def _predict_grid(self, x1lim, x2lim):
+        """ Gridded interpolation for natural neighbors interpolation. This function should not
+        be called directly. 
+        """
         lims = (*x1lim, *x2lim)
-        # X = deepcopy(np.c_[X,y])
-
-        X = np.c_[self.X, self.y]
         x1min, x1max, x2min, x2max = lims
         x1 = np.linspace(x1min, x1max, self.resolution)
         x2 = np.linspace(x2min, x2max, self.resolution)
-        xx, yy = np.meshgrid(x1, x2)
+        X1, X2 = np.meshgrid(x1, x2)
+        return self._predict(np.array([X1.ravel(), X2.ravel()]).T)
+        # # X = deepcopy(np.c_[X,y])
 
-        new = []
-        # This list stores all the tuples that contain points, and the closest point to the point in the 2D Grid that we are concerned with.
+        # X = np.c_[self.X, self.y]
+        # x1min, x1max, x2min, x2max = lims
+        # x1 = np.linspace(x1min, x1max, self.resolution)
+        # x2 = np.linspace(x2min, x2max, self.resolution)
+        # xx, yy = np.meshgrid(x1, x2)
 
-        for points in X:
-            # Check the closest point in the grid, corresponding to the source data point.
-            # We assume that the source is located at those exact coordinates on the grid.
-            # IDW is done using these source data point locations, while computing distance.
+        # new = []
+        # # This list stores all the tuples that contain points, and the closest point to the point in the 2D Grid that we are concerned with.
 
-            min_dist = np.inf
-            val = 0
-            for j in range(len(yy)):
-                temp = yy[j, 0]
-                for i in range(len(xx[0])):
-                    # Just checks for the closest location
-                    dist = np.linalg.norm(np.array([xx[0][i], temp]) - points[:2])
-                    if dist < min_dist:
-                        min_dist = dist
-                        val = (i, j)
-            new.append((points, val))
-            # New now contains all the points that we're concerned with.
+        # for points in X:
+        #     # Check the closest point in the grid, corresponding to the source data point.
+        #     # We assume that the source is located at those exact coordinates on the grid.
+        #     # IDW is done using these source data point locations, while computing distance.
 
-        new_grid = np.zeros((len(xx), len(yy)))
-        for i in range(len(new)):
-            # Storing the source data point values into the corresponding grid locations.
-            # As from above, we store all the values needed in the new_list.
-            x = new[i][1][0]
-            y = new[i][1][1]
-            if new[i][0][2] == 0.0:
-                new_grid[x][y] = 1e-20
-                ## This is to ensure the constraint that the input data is actually zero somewhere -- rare case...
-                ## We can approxiamte it very well
-            else:
-                new_grid[x][y] = new[i][0][2]
-        x_nz, y_nz = np.nonzero(new_grid)
+        #     min_dist = np.inf
+        #     val = 0
+        #     for j in range(len(yy)):
+        #         temp = yy[j, 0]
+        #         for i in range(len(xx[0])):
+        #             # Just checks for the closest location
+        #             dist = np.linalg.norm(np.array([xx[0][i], temp]) - points[:2])
+        #             if dist < min_dist:
+        #                 min_dist = dist
+        #                 val = (i, j)
+        #     new.append((points, val))
+        #     # New now contains all the points that we're concerned with.
 
-        # This list_nz contains all the non -zero points or the source data points that we will have
-        list_nz = []
-        for i in range(len(x_nz)):
-            list_nz.append((x_nz[i], y_nz[i]))
+        # new_grid = np.zeros((len(xx), len(yy)))
+        # for i in range(len(new)):
+        #     # Storing the source data point values into the corresponding grid locations.
+        #     # As from above, we store all the values needed in the new_list.
+        #     x = new[i][1][0]
+        #     y = new[i][1][1]
+        #     if new[i][0][2] == 0.0:
+        #         new_grid[x][y] = 1e-20
+        #         ## This is to ensure the constraint that the input data is actually zero somewhere -- rare case...
+        #         ## We can approxiamte it very well
+        #     else:
+        #         new_grid[x][y] = new[i][0][2]
+        # x_nz, y_nz = np.nonzero(new_grid)
 
-        final = deepcopy(new_grid)
-        ## The final grid that we create will have all the needed interpolated values
-        for i in range(len(xx[0])):
-            for j in range(len(yy)):
-                normalise = 0
-                if (i, j) in list_nz:
-                    ## These are the source data points. We can't interpolate here.
-                    # The point estimates have to be preserved
-                    continue
-                else:
-                    for elem in range(len(x_nz)):
-                        # Looping through every non-zero location
-                        source = np.array([x_nz[elem], y_nz[elem]])
-                        target = np.array([xx[0][i], yy[j][0]])
-                        ## Here we use the dist to compute the interpolated value, based on the exponent that the user provides.
-                        dist = (
-                            np.abs(xx[0][source[0]] - target[0]) ** self.exponent
-                            + np.abs(yy[source[1]][0] - target[1]) ** self.exponent
-                        ) ** (1 / self.exponent)
-                        final[i][j] += new_grid[x_nz[elem], y_nz[elem]] / dist
-                        normalise += 1 / (dist)
-                # We divide by the normalise factor, as per the definiton of the inverse distance weighted interpolation
-                final[i][j] /= normalise
-        self.interpolated_values = final
-        self.x_grid = xx
-        self.y_grid = yy
+        # # This list_nz contains all the non -zero points or the source data points that we will have
+        # list_nz = []
+        # for i in range(len(x_nz)):
+        #     list_nz.append((x_nz[i], y_nz[i]))
 
-        # Return the self object -- This is useful if we want to do something like = object.fit().predict() etc.,
-        return self.interpolated_values
+        # final = deepcopy(new_grid)
+        # ## The final grid that we create will have all the needed interpolated values
+        # for i in range(len(xx[0])):
+        #     for j in range(len(yy)):
+        #         normalise = 0
+        #         if (i, j) in list_nz:
+        #             ## These are the source data points. We can't interpolate here.
+        #             # The point estimates have to be preserved
+        #             continue
+        #         else:
+        #             for elem in range(len(x_nz)):
+        #                 # Looping through every non-zero location
+        #                 source = np.array([x_nz[elem], y_nz[elem]])
+        #                 target = np.array([xx[0][i], yy[j][0]])
+        #                 ## Here we use the dist to compute the interpolated value, based on the exponent that the user provides.
+        #                 dist = (
+        #                     np.abs(xx[0][source[0]] - target[0]) ** self.exponent
+        #                     + np.abs(yy[source[1]][0] - target[1]) ** self.exponent
+        #                 ) ** (1 / self.exponent)
+        #                 final[i][j] += new_grid[x_nz[elem], y_nz[elem]] / dist
+        #                 normalise += 1 / (dist)
+        #         # We divide by the normalise factor, as per the definiton of the inverse distance weighted interpolation
+        #         final[i][j] /= normalise
+        # self.interpolated_values = final
+        # self.x_grid = xx
+        # self.y_grid = yy
+
+        # # Return the self object -- This is useful if we want to do something like = object.fit().predict() etc.,
+        # return self.interpolated_values
 
     def _predict(self, X):
         """The function call to predict using the interpolated data
