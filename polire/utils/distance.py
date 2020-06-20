@@ -23,7 +23,7 @@ def haversine(X1, X2):
     # distance between latitudes 
     # and longitudes 
     lon1, lat1 = X1
-    lon2, lat2 = X2
+    lon2, lat2 = X2[:, 0], X2[:, 1]
     dLat = (lat2 - lat1) * math.pi / 180.0
     dLon = (lon2 - lon1) * math.pi / 180.0
 
@@ -40,6 +40,6 @@ def haversine(X1, X2):
     return rad * c 
 
 def euclidean(X1, X2):
-    return np.linalg.norm(X1 - X2)
+    return np.linalg.norm(X1 - X2, 2, axis=1)
 
 

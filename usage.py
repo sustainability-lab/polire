@@ -33,7 +33,7 @@ def test_grid():
     X1 = np.array(df[['longitude', 'latitude']])
     y1 = np.array(df['value'])
 
-    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging()]:
+    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging(), SpatialAverage(radius = 0.5, coordinate_type='Geographic')]:
         r.fit(X1, y1)
         y_pred = r.predict_grid()
         Z = y_pred
