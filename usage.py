@@ -16,7 +16,7 @@ y = np.array(y)
 def test_grid():
     # Gridded interpolation testing
     print("\nTesting on small dataset")
-    for r in [Random(), SpatialAverage(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging()]:
+    for r in [Random(), SpatialAverage(), BSpline(kx=1, ky=1), Trend(), Idw(coordinate_type='Geographic'), Kriging()]:
         r.fit(X, y)
         y_pred = r.predict_grid()
         Z = y_pred
@@ -33,7 +33,7 @@ def test_grid():
     X1 = np.array(df[['longitude', 'latitude']])
     y1 = np.array(df['value'])
 
-    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging(), SpatialAverage(radius = 0.5, coordinate_type='Geographic')]:
+    for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging(), SpatialAverage(radius = 30, coordinate_type='Geographic')]:
         r.fit(X1, y1)
         y_pred = r.predict_grid()
         Z = y_pred

@@ -5,39 +5,25 @@ import math
 import numpy as np
 
 
-def haversine(X1, X2):
+def haversine(test_point, training_locations):
     """
-    This function computes the distance in kilometers when the inputs are of the form
-    (Longitude, Latitude). Typically, when we want to do spatial interpolation over 
-    longer distances the curvature of the earth becomes significant
-    and hence it is better to use haversine distance. 
-    Attributes
-    ----------
-    X1: Input Data point. Typically a numpy array
-    X2: Inpute Data point. Typically a numpy array
-
-    Returns
-    -------
-    result: Distance in Kilometres
+    Arguments
+    ---------
+    One test point
+    Multiple Train Points
+    
+    Long Lat Order
     """
-    # distance between latitudes 
-    # and longitudes 
-    lon1, lat1 = X1
-    lon2, lat2 = X2[:, 0], X2[:, 1]
-    dLat = (lat2 - lat1) * math.pi / 180.0
-    dLon = (lon2 - lon1) * math.pi / 180.0
-
-    # convert to radians 
-    lat1 = (lat1) * math.pi / 180.0
-    lat2 = (lat2) * math.pi / 180.0
-
-    # apply formulae 
-    a = (pow(math.sin(dLat / 2), 2) + 
-         pow(math.sin(dLon / 2), 2) * 
-             math.cos(lat1) * math.cos(lat2)); 
-    rad = 6371
-    c = 2 * math.asin(math.sqrt(a)) 
-    return rad * c 
+    test_point = test_point.reshape(1, 2)
+    difference = (test_point - training_locations) * np.pi / 180
+    test_point_lat = test_point[:, 1] * np.pi / 180
+    training_locations_lat = training_locations[:, 1] * np.pi / 180
+    
+    a = np.sin(difference[:, 0] / 2)**2 * np.cos(test_point_lat) * np.cos(training_locations_lat) +\
+        np.sin(difference[:, 1] / 2)**2 
+    radius = 6371
+    c = 2 * np.arcsin(np.sqrt(a))
+    return radius * c
 
 def euclidean(X1, X2):
     return np.linalg.norm(X1 - X2, 2, axis=1)

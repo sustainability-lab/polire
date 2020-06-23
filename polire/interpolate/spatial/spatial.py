@@ -41,7 +41,7 @@ class SpatialAverage(Base):
         x1 = np.linspace(x1min, x1max, self.resolution)
         x2 = np.linspace(x2min, x2max, self.resolution)
         X1, X2 = np.meshgrid(x1, x2)
-        return self._average(np.asarray([X1.ravel(), X2.ravel()]).T)
+        return self._predict(np.asarray([X1.ravel(), X2.ravel()]).T)
 
     def _predict(self, X):
         """Function for interpolation on specific points.
@@ -58,5 +58,4 @@ class SpatialAverage(Base):
             points_within_rad = mask.sum()
             # print ('points_within_rad', points_within_rad)
             y_pred.append(sum(self.y[mask]) / points_within_rad)
-
         return np.asarray(y_pred)
