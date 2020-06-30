@@ -50,12 +50,10 @@ class SpatialAverage(Base):
         return self._average(X)
 
     def _average(self, X):
-        y_pred = []
+        y_pred = np.zeros(X.shape[0])
         for ix in range(X.shape[0]):
             dist = self.distance(X[ix], self.X)
             mask = self.radius >= dist
-            # print ('mask', mask)
             points_within_rad = mask.sum()
-            # print ('points_within_rad', points_within_rad)
-            y_pred.append(sum(self.y[mask]) / points_within_rad)
+            y_pred[ix] = self.y[mask].sum() / points_within_rad
         return np.asarray(y_pred)

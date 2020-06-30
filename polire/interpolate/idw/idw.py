@@ -100,4 +100,4 @@ class Idw(Base):
                 weights = 1 / (self.distance(point, self.X) ** self.exponent)
                 result[i] = np.multiply(self.y.reshape(self.y.shape[0],), weights).sum() / (weights.sum())
         self.result = result
-        return self.result
+        return self.result.reshape(result.shape[0], -1)
