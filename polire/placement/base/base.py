@@ -144,7 +144,7 @@ class Base:
             y_preds = [learners.predict(X) for learners in committee]
             y_preds = np.asarray(y_preds).T
             std = y_preds.std(axis=1)
-            A = std.argsort()[-N:][::-1]
+            A = std.argsort().flatten()[::-1][:N]
 
         if method == 'Var': # Variance
             self.Var = [] # Making global to enable debugging

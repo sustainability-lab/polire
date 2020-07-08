@@ -26,7 +26,6 @@ class TestSum(unittest.TestCase):
         object_to_be_tested._X = X
         object_to_be_tested.cov_np = X
         placed = object_to_be_tested.place(X, method="QBC", committee=committee)
-        print (placed)
         self.assertListEqual(list(placed[0]), [1])
 
 if __name__ == '__main__':
