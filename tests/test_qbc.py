@@ -4,7 +4,7 @@ import sys
 
 sys.path.append('..')
 
-import placement.base import Base
+from polire.placement.base import Base
 
 class TestSum(unittest.TestCase):
     def test_qbc_diagreeing_committee(self):
