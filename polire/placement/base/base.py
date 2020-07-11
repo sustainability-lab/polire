@@ -71,7 +71,11 @@ class Base:
         """
         return self._Kernel(X, Y)
     
-    def place(self, X, Init, N=1, method = 'MI', random_state=None):
+#<<<<<<< master
+#    def place(self, X, Init, N=1, method = 'MI', random_state=None):
+#=======
+    def place(self, X, Init, N=1, method = 'MI', random_state=None, committee=None):
+#>>>>>>> master
         """
         A method for placement from Krause et al. JMLR, 2008 Paper, can be found at,
         http://jmlr.org/papers/volume9/krause08a/krause08a.pdf
@@ -93,6 +97,11 @@ class Base:
             
             MI : Use Maximum Mutual Information for placement
             Var : Use Maximum Variance for placement 
+            
+        committee : list, default=None
+            A list of learners to be used to run QBC.
+            Mandatory to pass when using method = "QBC".
+            [cite]: https://doi.org/10.1145/130385.130417
         """
         assert self.__fitted, 'First call fit method to learn a kernel'
         assert type(X) == type(np.zeros((1,1))), 'X must be a numpy array'
@@ -102,7 +111,7 @@ class Base:
         if self.cov_np is None:
             self.cov_np = self.Kernel(X)
         
-        A = []
+        A = [] # selected indices
         
         if method == 'MI': # Mutual Information
             self.MI = [] # Making global to enable debugging
@@ -134,6 +143,14 @@ class Base:
                 A.append(selected)
                 self.MI.append(delta_old)#.squeeze())
         
+        if method == 'QBC': # QBC
+            if learners is None:
+                raise NotImplementedError("committee needs to passed.")
+            y_preds = [learners.predict(X) for learners in committee]
+            y_preds = np.asarray(y_preds).T
+            std = y_preds.std(axis=1)
+            A = std.argsort()[-N:][::-1]
+
         if method == 'Var': # Variance
             self.Var = [] # Making global to enable debugging
             for selection in range(N):
@@ -182,6 +199,7 @@ class Base:
                 
                 A = selected[:end+1]
         
+#<<<<<<< master
         if method == 'Optimal':
             self.MI_optimal = -np.inf
             for selected_all in combinations(list(set(range(X.shape[0])) - set(Init)), N):
@@ -215,3 +233,6 @@ class Base:
             return (A_opt, X[A_opt, :])
         
         return (A, X[A, :])
+#=======
+#        return (A, X[A, :])
+#>>>>>>> master
