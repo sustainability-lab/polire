@@ -61,10 +61,12 @@ class Kriging(Base):
         self.require_variance = require_variance
         self.variance = None
     	
-        if coordinate_type == "Eucledian":
+        if self.coordinate_type == 'Geographic':
+            self.coordinate_type = 'geographic'
+        elif self.coordinate_type == 'Euclidean':
             self.coordinate_type = 'euclidean'
         else:
-            self.coordinate_type = 'geographic'
+            raise NotImplementedError("Only Geographic and Euclidean Coordinates are available")
 
         self.nlags = nlags
 
