@@ -1,4 +1,5 @@
 import numpy as np
+from itertools import combinations, permutations
 
 class Base:
     """
@@ -70,7 +71,11 @@ class Base:
         """
         return self._Kernel(X, Y)
     
-    def place(self, X, N=1, method = 'MI', random_state=None, committee=None):
+#<<<<<<< master
+#    def place(self, X, Init, N=1, method = 'MI', random_state=None):
+#=======
+    def place(self, X, Init, N=1, method = 'MI', random_state=None, committee=None):
+#>>>>>>> master
         """
         A method for placement from Krause et al. JMLR, 2008 Paper, can be found at,
         http://jmlr.org/papers/volume9/krause08a/krause08a.pdf
@@ -113,10 +118,10 @@ class Base:
             for selection in range(N):
                 selected = None
                 delta_old = -np.inf
-                location_bag = set(range(X.shape[0]))-set(A)
+                location_bag = set(range(X.shape[0]))-set(A) - set(Init)
                 for Y_ind in location_bag:
                     y = [Y_ind]
-                    A_bar = list(location_bag - set(y))
+                    A_bar = list(location_bag - set(y) - set(Init))
 
                     if len(A) == 0:
                         numer = self.cov_np[y, y]
@@ -136,7 +141,7 @@ class Base:
                         selected = Y_ind
                         delta_old = delta
                 A.append(selected)
-                self.MI.append(delta_old.squeeze())
+                self.MI.append(delta_old)#.squeeze())
         
         if method == 'QBC': # QBC
             if committee is None:
@@ -151,10 +156,10 @@ class Base:
             for selection in range(N):
                 selected = None
                 delta_old = -np.inf
-                location_bag = set(range(X.shape[0]))-set(A)
+                location_bag = set(range(X.shape[0]))-set(A)-set(Init)
                 for Y_ind in location_bag:
                     y = [Y_ind]
-                    A_bar = list(location_bag - set(y))
+                    A_bar = list(location_bag - set(y) - set(Init))
 
                     if len(A) == 0:
                         numer = self.cov_np[y, y]
@@ -169,12 +174,12 @@ class Base:
                 self.Var.append(delta_old.squeeze())
         
         if method == 'Rand': # Random placement
-            self.MI = [] # Making global to enable debugging
+            self.MI_rand = [] # Making global to enable debugging
             np.random.seed(random_state)
-            selected = np.random.choice(range(X.shape[0]), size=N, replace=False)
+            selected = np.random.choice(list(set(range(X.shape[0]))-set(Init)), size=N, replace=False)
             for end in range(N):
-                y = [end]
-                A_bar = selected[end+1:]
+                y = [selected[end]]
+                A_bar = list(set(range(X.shape[0])) - set(y) - set(Init) - set(A))
 
                 if len(A) == 0:
                     numer = self.cov_np[y, y]
@@ -190,8 +195,44 @@ class Base:
                     .dot(np.linalg.pinv(self.cov_np[np.ix_(A_bar, A_bar)]))\
                     .dot(self.cov_np[np.ix_(A_bar, y)])
                 delta = numer/denom
-                self.MI.append(delta.squeeze())
+                self.MI_rand.append(delta.squeeze())
                 
                 A = selected[:end+1]
         
+#<<<<<<< master
+        if method == 'Optimal':
+            self.MI_optimal = -np.inf
+            for selected_all in combinations(list(set(range(X.shape[0])) - set(Init)), N):
+                for selected in permutations(selected_all):
+                    self.MI_tmp = []
+                    A = []
+                    for end in range(N):
+                        y = [selected[end]]
+                        A_bar = list(set(range(X.shape[0])) - set(y) - set(Init) - set(A))
+
+                        if len(A) == 0:
+                            numer = self.cov_np[y, y]
+                        else:
+                            numer = self.cov_np[y, y] - self.cov_np[np.ix_(y, A)]\
+                            .dot(np.linalg.pinv(self.cov_np[np.ix_(A, A)]))\
+                            .dot(self.cov_np[np.ix_(A, y)])
+
+                        if len(A) +1 == X.shape[0]:
+                            denom = self.cov_np[y, y]
+                        else:
+                            denom = self.cov_np[y, y] - self.cov_np[np.ix_(y, A_bar)]\
+                            .dot(np.linalg.pinv(self.cov_np[np.ix_(A_bar, A_bar)]))\
+                            .dot(self.cov_np[np.ix_(A_bar, y)])
+                        delta = numer/denom
+                        self.MI_tmp.append(delta.squeeze())
+
+                        A = selected[:end+1]
+                    if self.MI_optimal < sum(self.MI_tmp):
+                        self.MI_optimal = sum(self.MI_tmp)
+                        A_opt = list(A)
+            return (A_opt, X[A_opt, :])
+        
         return (A, X[A, :])
+#=======
+#        return (A, X[A, :])
+#>>>>>>> master

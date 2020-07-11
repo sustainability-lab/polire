@@ -2,7 +2,7 @@ from ..base import Base
 import numpy as np
 import multiprocessing as mp
 import psutil
-from GPy.kern import Matern32, Matern52, RBF
+from GPy.kern import Matern32, Matern52, RBF, ExpQuad
 from scipy.optimize import least_squares
 
 class NottDuns(Base):
@@ -11,7 +11,8 @@ class NottDuns(Base):
     https://academic.oup.com/biomet/article-abstract/89/4/819/242307
     
     Parameters
-    ----------
+    ------------
+            
     N : int, default=10
         Number of nearby points to learn each kernel locally
     
@@ -22,7 +23,7 @@ class NottDuns(Base):
         type of kernel to be used
     """
     
-    def __init__(self, N=10, eta=1, kernel_name='m32', verbose=True):
+    def __init__(self, N=10, eta=1, kernel_name='m32',verbose=True):
         super().__init__(verbose)
         self.__N = N + 1 # Number of datapoints for local kernel learning
         self.__eta = eta # Eta hyperparameter for weighting function
@@ -59,40 +60,40 @@ class NottDuns(Base):
     
     def _model(self, loc):
         def __D_z(sj):
-            pj = self._Gamma[sj, sj]
-            return sum(np.meshgrid(pj, pj)) - 2 * self._Gamma[np.ix_(sj, sj)]
+            return self._Gamma[np.ix_(sj, sj)]
 
         def __obfunc(x):
             kernel = kern_dict[self.__kernel_name]
             kernel.variance = x[0]
-            kernel.lengthscale = x[1]
+            kernel.lengthscale = x[1:]
             kern_vals = kernel.K(self._X[self.__close_locs[loc]])
             term = (__D_z(self.__close_locs[loc]) - kern_vals)/kern_vals
             return np.sum(term**2)
         
         # ARD can be added
-        kern_dict = {'m32': Matern32(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1]))), 
-                 'm52': Matern52(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1]))), 
-                 'rbf': RBF(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])))}
+        kern_dict = {'m32': Matern32(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])), ARD=True), 
+                 'm52': Matern52(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])), ARD=True), 
+                 'rbf': RBF(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])), ARD=True),
+                  'expqd':  ExpQuad(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])), ARD=True)}
 
         kernel = kern_dict[self.__kernel_name]
-        var, ls = least_squares(__obfunc, [1, 1]).x
-        kernel.variance = var
-        kernel.lengthscale = ls
+        params = least_squares(__obfunc, np.ones((self._X.shape[1]+1))).x
+        kernel.variance = params[0]
+        kernel.lengthscale = params[1:]
         return kernel.K
           
     def _c_inv(self, kern_func):
         return np.linalg.pinv(kern_func(self._X))
         
     def __learnLocal(self):
-        self._verbose_print('Training local kernels. This may take a few moments')
+        #self._verbose_print('Training local kernels. This may take a few moments')
         
         job = mp.Pool(psutil.cpu_count())
         self.__kernels = job.map(self._model, list(range(self._X.shape[0]))) 
         self.__C_inv = job.map(self._c_inv, self.__kernels)
         job.close()
         
-        self._verbose_print('Training complete')
+        #self._verbose_print('Training complete')
     
     def _Kernel(self, S1, S2=None):
         """
@@ -162,21 +163,21 @@ class NottDuns(Base):
         This is not expected to be called directly.
         """
         
-        assert type(ECM) == type(np.zeros((1,1))), 'ECM must be a numpy array'
-        assert ECM.shape[0] == ECM.shape[1] == X.shape[0], 'ECM must have ('+str(X.shape[0])+', '+str(X.shape[0])+') shape'
+        self._Gamma = ECM # Empirical Covariance Matrix
+        assert type(self._Gamma) == type(np.zeros((1,1))), 'ECM must be a numpy array'
+        assert self._Gamma.shape[0] == self._Gamma.shape[1] == X.shape[0], 'ECM must have ('+str(X.shape[0])+', '+str(X.shape[0])+') shape'
         
         self._X = X # training fetures
         self._y = y # Training values
-        self._Gamma = ECM # Empirical Covariance Matrix
         self.__param_dict['X'] = X
         self.__param_dict['y'] = y
-        self.__param_dict['ECM'] = ECM
+        self.__param_dict['ECM'] = self._Gamma
         
         self.__close_locs = self.__get_close_locs() # Get closest N locations for each train location
         self.__learnLocal() # Learning local kernels
         return self
         
-    def _predict(self, X, return_cov):
+    def _predict(self, X, return_cov=False):
         """
         This function is for the NottDuns Class.
         This is not expected to be called directly.
@@ -189,5 +190,5 @@ class NottDuns(Base):
                                  .dot(self._y - self._y.mean()) + self._y.mean()
         if return_cov:
             pred_var = self._Kernel(X, X) - KX_test.dot(self._KX_inv).dot(KX_test.T)
-            return (pred_mean, pred_cov)
+            return (pred_mean, pred_var)
         return pred_mean
