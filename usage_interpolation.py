@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from polire.interpolate import Random, Trend, BSpline, Idw, Natural_neighbor, Kriging, SpatialAverage
+from ToolkitName.interpolate import Random, Trend, BSpline, Idw, Natural_neighbor, Kriging, SpatialAverage
 
 # sample data
 X = [[0, 0], [0, 3], [3, 0], [3, 3]]
@@ -35,7 +35,7 @@ def test_grid():
 
     for r in [Random(), BSpline(kx=1, ky=1), Trend(), Idw(), Kriging(), SpatialAverage(radius = 30, coordinate_type='Geographic')]:
         r.fit(X1, y1)
-        y_pred = r.predict_grid()
+        y_pred = r.predict_grid((77.05, 77.28), (28.55,28.77))
         Z = y_pred
         sns.heatmap(Z)
         plt.title(r)
@@ -82,8 +82,7 @@ def test_nn():
     # Patience pays
     nn = Natural_neighbor()
     nn.fit(X,y)
-    y_pred = nn.predict_grid()
-    print(y_pred)
+    y_pred = nn.predict_grid((77.05, 77.28), (28.55,28.77))
     sns.heatmap(y_pred)
     plt.title(nn)
     plt.show()

@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
-from polire.custom import CustomInterpolator
+from ToolkitName.custom import CustomInterpolator
 import xgboost
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression

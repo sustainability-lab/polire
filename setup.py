@@ -7,7 +7,7 @@ import os
 from setuptools import find_packages, setup
 
 # get __version__ from _version.py
-ver_file = os.path.join('polire', '_version.py')
+ver_file = os.path.join('ToolkitName', '_version.py')
 with open(ver_file) as f:
     exec(f.read())
 
@@ -15,15 +15,15 @@ with open(ver_file) as f:
 with open("requirements.txt") as f:
     REQ = f.read().splitlines()
 
-DISTNAME = 'polire'
-DESCRIPTION = 'A collection of interpolation methods.'
+DISTNAME = 'ToolkitName'
+DESCRIPTION = 'A collection of interpolation algorithms and sensor placement algorithms.'
 with codecs.open('README.md', encoding='utf-8-sig') as f:
     LONG_DESCRIPTION = f.read()
-MAINTAINER = 'Apoorv Agnihotri, S Deepak Narayanan'
-MAINTAINER_EMAIL = 'apoorv.agnihotri@iitgn.ac.in, deepak.narayanan@iitgn.ac.in'
-URL = 'https://sustainability-lab.github.io/polire'
+MAINTAINER = 'Anonymous'
+MAINTAINER_EMAIL = 'Anonymous'
+URL = 'Anonymous'
 LICENSE = 'new BSD'
-DOWNLOAD_URL = 'https://sustainability-lab.github.io/polire'
+DOWNLOAD_URL = 'Anonymous'
 VERSION = __version__
 INSTALL_REQUIRES = REQ
 CLASSIFIERS = ['Intended Audience :: Science/Research',

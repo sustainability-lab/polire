@@ -47,7 +47,7 @@ class Kriging(Base):
         variogram_model = 'linear',
         require_variance = False,
         resolution = "standard",
-        coordinate_type = "Eucledian",
+        coordinate_type = "Euclidean",
         nlags = 6
     ):
 
@@ -57,7 +57,7 @@ class Kriging(Base):
         self.uk = None
         self.type = type 
         self.plotting = plotting
-        self.coordinate_type = None
+        self.coordinate_type = coordinate_type
         self.require_variance = require_variance
         self.variance = None
     	
@@ -66,6 +66,7 @@ class Kriging(Base):
         elif self.coordinate_type == 'Euclidean':
             self.coordinate_type = 'euclidean'
         else:
+            print(self.coordinate_type)
             raise NotImplementedError("Only Geographic and Euclidean Coordinates are available")
 
         self.nlags = nlags
