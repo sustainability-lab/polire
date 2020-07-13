@@ -101,15 +101,15 @@ class Base:
         
         self.cov_np = self.Kernel(X)
         
-        A = list(Init)
-        new_locs = []
+        A = []#list(Init)
+        #new_locs = []
         
         if method == 'MI': # Mutual Information
             self.MI = [] # Making global to enable debugging
             for selection in range(N):
                 selected = None
                 delta_old = -np.inf
-                location_bag = set(range(X.shape[0]))-set(A)
+                location_bag = set(range(X.shape[0]))-set(A)-set(Init)
                 for Y_ind in location_bag:
                     y = [Y_ind]
                     A_bar = list(location_bag - set(y))
@@ -132,7 +132,7 @@ class Base:
                         selected = Y_ind
                         delta_old = delta
                 A.append(selected)
-                new_locs.append(selected)
+                #new_locs.append(selected)
                 self.MI.append(delta_old)#.squeeze())
         
         if method == 'Entropy': # Entropy
@@ -140,7 +140,7 @@ class Base:
             for selection in range(N):
                 selected = None
                 delta_old = -np.inf
-                location_bag = set(range(X.shape[0]))-set(A)
+                location_bag = set(range(X.shape[0]))-set(A)-set(Init)
                 for Y_ind in location_bag:
                     y = [Y_ind]
                     A_bar = list(location_bag - set(y))
@@ -155,14 +155,14 @@ class Base:
                         selected = Y_ind
                         delta_old = numer
                 A.append(selected)
-                new_locs.append(selected)
+                #new_locs.append(selected)
                 self.Var.append(delta_old.squeeze())
         
         if method == 'Random': # Random placement
             self.MI_rand = [] # Making global to enable debugging
             np.random.seed(random_state)
-            selected = np.random.choice(list(set(range(X.shape[0]))-set(A)), size=N, replace=False).tolist()
-            new_locs = list(selected)
+            selected = np.random.choice(list(set(range(X.shape[0]))-set(Init)), size=N, replace=False).tolist()
+            #new_locs = list(selected)
             for end in range(N):
                 y = [selected[end]]
                 A_bar = list(set(range(X.shape[0])) - set(y) - set(A))
@@ -183,7 +183,7 @@ class Base:
                 delta = numer/denom
                 self.MI_rand.append(delta.squeeze())
                 
-                A += selected[:end+1]
+                A = selected[:end+1]
         
 #         ## Under development
 #         if method == 'Optimal':
@@ -218,4 +218,4 @@ class Base:
 #                         A_opt = list(A)
 #             return (A_opt, X[A_opt, :])
         
-        return (new_locs, X[new_locs, :])
+        return (A, X[A, :])
