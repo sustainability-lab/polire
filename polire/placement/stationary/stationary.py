@@ -22,9 +22,8 @@ class Stationary(Base):
                  'm52': Matern52(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])), ARD=True), 
                  'rbf': RBF(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])), ARD=True)}
         
-        
         self.__model = GPRegression(X, y, kern_dict[self.__kernel_name])
-        self.__model.optimize_restarts(self.__n_restarts)
+        self.__model.optimize_restarts(self.__n_restarts, verbose = self._verbose)
         return self
         
     def _predict(self, X, return_cov=True):
