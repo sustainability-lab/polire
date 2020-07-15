@@ -165,7 +165,7 @@ class Base:
             #new_locs = list(selected)
             for end in range(N):
                 y = [selected[end]]
-                A_bar = list(set(range(X.shape[0])) - set(y) - set(A))
+                A_bar = list(set(range(X.shape[0])) - set(y) - set(A)-set(Init))
 
                 if len(A) == 0:
                     numer = self.cov_np[y, y]
