@@ -7,7 +7,8 @@ from .polynomials import _create_polynomial
 
 class Trend(Base):
     """Class to interpolate by fitting a curve to the data points
-    available using `scipy`'s `curve_fit`.
+    available using `scipy`'s `curve_fit`. We use a trend interpolator
+    in this particular case to fit polynomials.
     
     Parameters
     ----------

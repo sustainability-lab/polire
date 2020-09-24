@@ -137,10 +137,10 @@ class NottDuns(Base):
                 self.__c_mat_s1s2[i, :, :] = self.__kernels[i](S1)
         
         # Calculating main covariance function
-        first_term = np.zeros((self._X.shape[0], self._X.shape[0], S1.shape[0], S2.shape[0]), dtype='float64')
+        first_term = np.zeros((S1.shape[0], S2.shape[0]), dtype='float64')
         for i in range(self._X.shape[0]):
             for j in range(self._X.shape[0]):
-                first_term[i, j, :, :] = (self.__c_mat_s1[i, :, :]\
+                first_term += (self.__c_mat_s1[i, :, :]\
                                          .dot(self.__C_inv[i])\
                                          .dot(self._Gamma)\
                                          .dot(self.__C_inv[j])\
@@ -148,14 +148,14 @@ class NottDuns(Base):
                                         (self.__v_s1[:, i].reshape(-1, 1)\
                                          .dot(self.__v_s2[:, j].reshape(1, -1)))
             
-        second_term = np.zeros((self._X.shape[0], S1.shape[0], S2.shape[0]))
+        second_term = np.zeros((S1.shape[0], S2.shape[0]))
         for i in range(self._X.shape[0]):
-            second_term[i, :, :] =  np.sqrt(self.__v_s1[:, i].reshape(-1,1).dot(self.__v_s2[:, i].reshape(1,-1))) *\
+            second_term +=  np.sqrt(self.__v_s1[:, i].reshape(-1,1).dot(self.__v_s2[:, i].reshape(1,-1))) *\
                                (self.__c_mat_s1s2[i, :, :] - self.__c_mat_s1[i, :, :].\
                                                                      dot(self.__C_inv[i]).\
                                                                      dot(self.__c_mat_s2[i, :, :]))
         
-        return first_term.sum(axis=(0,1)) + second_term.sum(axis=0)
+        return first_term + second_term
     
     def _fit(self, X, y, ECM):
         """

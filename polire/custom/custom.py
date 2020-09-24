@@ -6,7 +6,9 @@ from ..interpolate.base import Base
 class CustomInterpolator(Base):
     """
     Class to interpolate by fitting a sklearn type Regressor to
-    the given data.
+    the given data. The custom interpolator is a wrapper that can be extended by using custom methods to interpolate. The custom methods should at the least have a fit and a predict method which would be internally used by the Custom interpolator.
+
+
 
     Parameters
     ----------
