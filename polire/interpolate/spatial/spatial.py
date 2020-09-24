@@ -5,8 +5,7 @@ from ...utils.distance import euclidean, haversine
 
 class SpatialAverage(Base):
     """
-    Class to interpolate by fitting a XGBoost Regressor to given
-    data.
+Spatial averaging is a simple interpolation method that predicts the target value as the mean of other known target values; known points that lie within a set distance from the unknown point are used in averaging.
     Note that radius you specify must be in kilometres if you are passing latitude and longitude as inputs
     """
 
