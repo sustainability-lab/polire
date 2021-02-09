@@ -74,7 +74,7 @@ class Base:
 #<<<<<<< master
 #    def place(self, X, Init, N=1, method = 'MI', random_state=None):
 #=======
-    def place(self, X, Init, N=1, method = 'MI', random_state=None, committee=None):
+    def place(self, X, N=1, method = 'MI', random_state=None, committee=None):
 #>>>>>>> master
         """
         A method for placement from Krause et al. JMLR, 2008 Paper, can be found at,
@@ -118,10 +118,10 @@ class Base:
             for selection in range(N):
                 selected = None
                 delta_old = -np.inf
-                location_bag = set(range(X.shape[0]))-set(A) - set(Init)
+                location_bag = set(range(X.shape[0]))-set(A)
                 for Y_ind in location_bag:
                     y = [Y_ind]
-                    A_bar = list(location_bag - set(y) - set(Init))
+                    A_bar = list(location_bag - set(y))
 
                     if len(A) == 0:
                         numer = self.cov_np[y, y]
@@ -156,10 +156,10 @@ class Base:
             for selection in range(N):
                 selected = None
                 delta_old = -np.inf
-                location_bag = set(range(X.shape[0]))-set(A)-set(Init)
+                location_bag = set(range(X.shape[0]))-set(A)
                 for Y_ind in location_bag:
                     y = [Y_ind]
-                    A_bar = list(location_bag - set(y) - set(Init))
+                    A_bar = list(location_bag - set(y))
 
                     if len(A) == 0:
                         numer = self.cov_np[y, y]
@@ -176,10 +176,10 @@ class Base:
         if method == 'Rand': # Random placement
             self.MI_rand = [] # Making global to enable debugging
             np.random.seed(random_state)
-            selected = np.random.choice(list(set(range(X.shape[0]))-set(Init)), size=N, replace=False)
+            selected = np.random.choice(list(set(range(X.shape[0]))), size=N, replace=False)
             for end in range(N):
                 y = [selected[end]]
-                A_bar = list(set(range(X.shape[0])) - set(y) - set(Init) - set(A))
+                A_bar = list(set(range(X.shape[0])) - set(y) - set(A))
 
                 if len(A) == 0:
                     numer = self.cov_np[y, y]
@@ -202,13 +202,13 @@ class Base:
 #<<<<<<< master
         if method == 'Optimal':
             self.MI_optimal = -np.inf
-            for selected_all in combinations(list(set(range(X.shape[0])) - set(Init)), N):
+            for selected_all in combinations(list(set(range(X.shape[0]))), N):
                 for selected in permutations(selected_all):
                     self.MI_tmp = []
                     A = []
                     for end in range(N):
                         y = [selected[end]]
-                        A_bar = list(set(range(X.shape[0])) - set(y) - set(Init) - set(A))
+                        A_bar = list(set(range(X.shape[0])) - set(y) - set(A))
 
                         if len(A) == 0:
                             numer = self.cov_np[y, y]
