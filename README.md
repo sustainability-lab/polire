@@ -5,7 +5,7 @@ The word "interpolation" has Latin origin and is composed of two words - Inter m
 
 This repository is a collection of several spatial interpolation algorithm along with various sensor placement algorithms. 
 
-Contributors:  [S Deepak Narayanan](https://github.com/sdeepaknarayanan), [Zeel Patel](https://github.com/patel-zeel), [Apoorv Agnihotri](https://github.com/apoorvagnihotri), and [Nipun Batra](https://github.com/nipunbatra).
+Contributors:  [S Deepak Narayanan](https://github.com/sdeepaknarayanan), [Zeel B Patel](https://github.com/patel-zeel), [Apoorv Agnihotri](https://github.com/apoorvagnihotri), and [Nipun Batra](https://github.com/nipunbatra).
 
 This project is a part of Sustainability Lab at IIT Gandhinagar.
 
