@@ -16,7 +16,8 @@ def common(model):
 
 
 def test_basic():
-    from polire import IDW, Spline, Trend, GP, Kriging, NaturalNeighbors, SpatialAverage
+    from polire import IDW, Spline, Trend, GP, Kriging, NaturalNeighbors, SpatialAverage, CustomInterpolator
+    from sklearn.linear_model import LinearRegression
 
     common(IDW())
     common(Spline())
@@ -25,3 +26,5 @@ def test_basic():
     common(Kriging())
     common(NaturalNeighbors())
     common(SpatialAverage())
+    common(CustomInterpolator(LinearRegression,
+           reg_kwargs={"normalize": True}))

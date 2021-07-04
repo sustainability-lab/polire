@@ -6,3 +6,4 @@ from .spatial.spatial import SpatialAverage
 from .natural_neighbors.natural_neighbors import NaturalNeighbors
 from .kriging.kriging import Kriging
 from .gp.gp import GP
+from .custom.custom import CustomInterpolator

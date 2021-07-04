@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..interpolate.base import Base
+from ..base import Base
 
 
 class CustomInterpolator(Base):
