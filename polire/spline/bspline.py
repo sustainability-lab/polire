@@ -6,11 +6,11 @@ from ..base import Base
 from ...utils import find_closest
 
 
-class BSpline(Base):
+class Spline(Base):
     """
     Class to use a bivariate B-spline to interpolate values.
     https://docs.scipy.org/doc/scipy-0.18.1/reference/generated/scipy.interpolate.bisplrep.html#scipy.interpolate.bisplrep
-    
+
     Parameters
     ----------
     kx, ky: int, int, optional
@@ -39,7 +39,8 @@ class BSpline(Base):
         # fitting the curve
         # bisplrep returns details of the fitted curve
         # read bisplrep docs for more info about it's return values.
-        self.tck = bisplrep(X[:, 0], X[:, 1], y, kx=self.kx, ky=self.ky, s=self.s)
+        self.tck = bisplrep(X[:, 0], X[:, 1], y,
+                            kx=self.kx, ky=self.ky, s=self.s)
         return self
 
     def _predict_grid(self, x1lim, x2lim):
