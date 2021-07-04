@@ -24,7 +24,7 @@ MAINTAINER_EMAIL = 'patel_zeel@iitgn.ac.in, apoorv.agnihotri@iitgn.ac.in, deepak
 URL = 'https://sustainability-lab.github.io/polire'
 LICENSE = 'new BSD'
 DOWNLOAD_URL = 'https://sustainability-lab.github.io/polire'
-VERSION = __version__
+VERSION = "0.1.1"
 INSTALL_REQUIRES = REQ
 CLASSIFIERS = ['Intended Audience :: Science/Research',
                'Intended Audience :: Developers',
