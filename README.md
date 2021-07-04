@@ -1,4 +1,4 @@
-![Tests](![example workflow](https://github.com/patel-zeel/polire/actions/workflows/python-package.yml/badge.svg))
+![example workflow](https://github.com/patel-zeel/polire/actions/workflows/python-package.yml/badge.svg)
 
 
 Polire
