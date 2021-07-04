@@ -1,7 +1,8 @@
 import numpy as np
 
 from ..base import Base
-from ...utils.distance import euclidean, haversine
+from ..utils.distance import euclidean, haversine
+
 
 class SpatialAverage(Base):
     """
@@ -20,7 +21,9 @@ class SpatialAverage(Base):
         elif self.coordinate_type == 'Euclidean':
             self.distance = euclidean
         else:
-            raise NotImplementedError("Only Geographic and Euclidean Coordinates are available")
+            raise NotImplementedError(
+                "Only Geographic and Euclidean Coordinates are available")
+
     def _fit(self, X, y):
         """Function for fitting.
         This function is not supposed to be called directly.

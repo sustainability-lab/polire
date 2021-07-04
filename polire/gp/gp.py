@@ -34,6 +34,8 @@ class GP(Base):
         This function shouldn't be called directly.
         """
         np.random.seed(random_state)
+        if len(y.shape) == 1:
+            y = y.reshape(-1, 1)
         self.model = GPRegression(X, y, self.kernel)
         self.model.optimize_restarts(n_restarts, verbose=verbose)
         return self

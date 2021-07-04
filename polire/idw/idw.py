@@ -2,7 +2,7 @@
 This is a module for inverse distance weighting (IDW) Spatial Interpolation
 """
 import numpy as np
-from ...utils.distance import haversine, euclidean
+from ..utils.distance import haversine, euclidean
 from ..base import Base
 from copy import deepcopy
 
