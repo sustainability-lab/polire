@@ -12,6 +12,7 @@ def common(model):
     y_new = model.predict(X_new)
 
     assert y_new.size == 40
+    print(repr(model), 'Passed')
 
 
 def test_basic():
