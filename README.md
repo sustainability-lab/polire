@@ -30,19 +30,31 @@ y_new = model.predict(X_new)
 
 ### Supported Interpolation Methods
 ```python
-from sklearn.linear_model import LinearRegression # or any sklearn regressor
-from GPy.kern import Matern32 # or any other kernel
 from polire import (
     Kriging, # Best spatial unbiased predictor
-    GP(Matern32(input_dim=2)), # Gaussian process interpolator
+    GP, # Gaussian process interpolator from GPy
     IDW, # Inverse distance weighting
     SpatialAverage,
     Spline,
     Trend,
     Random, # Predict uniformly within the observation range, a reasonable baseline
     NaturalNeighbors,
-    CustomInterpolator(LinearRegression, reg_kwargs={"normalize": True})
+    CustomInterpolator # Supports any regressor from Scikit-learn
 )
+```
+
+### Use GP kernels from GPy and regressors from sklearn
+```python
+from sklearn.linear_model import LinearRegression # or any Scikit-learn regressor
+from GPy.kern import Matern32 # or any other GPy kernel
+
+from polire import GP, CustomInterpolator
+
+# GP model
+model = GP(Matern32(input_dim=2))
+
+# Sklearn model
+model = CustomInterpolator(LinearRegression, reg_kwargs={"normalize": True})
 ```
 
 More info
