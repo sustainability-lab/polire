@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
-from polire.custom import CustomInterpolator
+from polire import CustomInterpolator
 import xgboost
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
@@ -18,15 +18,12 @@ X = np.array(X)
 y = np.array(y)
 
 for r in [
-    CustomInterpolator(xgboost.XGBRegressor),
-    CustomInterpolator(RandomForestRegressor),
-    CustomInterpolator(LinearRegression, reg_kwargs={"normalize": True}),
-    CustomInterpolator(
-        KNeighborsRegressor, reg_kwargs={"n_neighbors": 3, "weights": "distance"}
-    ),
-    CustomInterpolator(
-        GaussianProcessRegressor, reg_kwargs={"normalize_y": True, "kernel": Matern()}
-    ),
+    CustomInterpolator(xgboost.XGBRegressor()),
+    CustomInterpolator(RandomForestRegressor()),
+    CustomInterpolator(LinearRegression(normalize=True)),
+    CustomInterpolator(KNeighborsRegressor(n_neighbors=3, weights="distance")),
+    CustomInterpolator(GaussianProcessRegressor(
+        normalize_y=True, kernel=Matern()))
 ]:
 
     r.fit(X, y)

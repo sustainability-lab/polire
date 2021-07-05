@@ -51,7 +51,7 @@ def order_poly(vertices):
     return sorted(vertices, key=condition)
 
 
-class NaturalNeighbors(Base):
+class NaturalNeighbor(Base):
     """Class used for natural neighbors interpolation. This method is an implementation first
     proposed by Sibson et al. [1] in 1981. We use the weights derived using the work in [1]
     and leave it for future addition, the use of Laplace Weights [2].

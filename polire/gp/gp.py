@@ -51,9 +51,9 @@ class GP(Base):
         X1, X2 = np.meshgrid(x1, x2)
         X = np.array([(i, j) for i, j in zip(X1.ravel(), X2.ravel())])
 
-        predictions, _ = self.model.predict(X).reshape(len(x1), len(x2))
+        predictions = self.model.predict(X)[0].reshape(len(x1), len(x2))
 
-        return predictions
+        return predictions.ravel()
 
     def _predict(self, X, return_variance=False):
         """This function should be called to return the interpolated data in kriging
@@ -61,6 +61,6 @@ class GP(Base):
 
         predictions, variance = self.model.predict(X)
         if return_variance:
-            return predictions, variance
+            return predictions.ravel(), variance
         else:
-            return predictions
+            return predictions.ravel()

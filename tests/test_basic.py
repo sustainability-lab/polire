@@ -11,12 +11,12 @@ def common(model):
     model.fit(X, y)
     y_new = model.predict(X_new)
 
-    assert y_new.size == 40
+    assert y_new.shape == (40, )
     print(repr(model), 'Passed')
 
 
 def test_basic():
-    from polire import IDW, Spline, Trend, GP, Kriging, NaturalNeighbors, SpatialAverage, CustomInterpolator
+    from polire import IDW, Spline, Trend, GP, Kriging, NaturalNeighbor, SpatialAverage, CustomInterpolator
     from sklearn.linear_model import LinearRegression
 
     common(IDW())
@@ -24,6 +24,6 @@ def test_basic():
     common(Trend())
     common(GP())
     common(Kriging())
-    common(NaturalNeighbors())
+    common(NaturalNeighbor())
     common(SpatialAverage())
     common(CustomInterpolator(LinearRegression(normalize=True)))
