@@ -1,11 +1,11 @@
 **/*.ipynb_checkpoints
 **/*.pyc
-testing_directory_nb.ipynb
 .env/
 *__pycache__/
+.pytest_cache
 .vscode
+.Rhistory
 build
 dist
 polire.egg-info
-testing usagea.ipynb
-voronoi/
+global_test.py

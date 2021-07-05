@@ -1,7 +1,9 @@
 import numpy as np
+from scipy.spatial.distance import cdist
 
 from ..base import Base
-from ...utils.distance import euclidean, haversine
+from ..utils.distance import euclidean, haversine
+
 
 class SpatialAverage(Base):
     """
@@ -20,7 +22,9 @@ class SpatialAverage(Base):
         elif self.coordinate_type == 'Euclidean':
             self.distance = euclidean
         else:
-            raise NotImplementedError("Only Geographic and Euclidean Coordinates are available")
+            raise NotImplementedError(
+                "Only Geographic and Euclidean Coordinates are available")
+
     def _fit(self, X, y):
         """Function for fitting.
         This function is not supposed to be called directly.
@@ -50,12 +54,16 @@ class SpatialAverage(Base):
         return self._average(X)
 
     def _average(self, X):
-        y_pred = []
-        for ix in range(X.shape[0]):
-            dist = self.distance(X[ix], self.X)
+        # Going temporarily out of consistency to get speed. Fix this later
+        if self.coordinate_type == 'Euclidean':
+            dist = cdist(X, self.X)
             mask = self.radius >= dist
-            # print ('mask', mask)
-            points_within_rad = mask.sum()
-            # print ('points_within_rad', points_within_rad)
-            y_pred.append(sum(self.y[mask]) / points_within_rad)
-        return np.asarray(y_pred)
+            return (self.y*mask).sum(axis=1)/mask.sum(axis=1)
+        else:
+            y_pred = []
+            for ix in range(X.shape[0]):
+                dist = self.distance(X[ix], self.X)
+                mask = self.radius >= dist
+                points_within_rad = mask.sum()
+                y_pred.append(sum(self.y[mask]) / points_within_rad)
+            return np.asarray(y_pred)

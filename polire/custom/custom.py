@@ -1,6 +1,6 @@
 import numpy as np
 
-from ..interpolate.base import Base
+from ..base import Base
 
 
 class CustomInterpolator(Base):
@@ -14,7 +14,7 @@ class CustomInterpolator(Base):
         This variable is used to pass in the Regressor we would like
         to use for interpolation. The regressor sould be sklearn type
         regressor. Example from sklearn.ensemble -> RandomForestRegressor
-    
+
     reg_kwargs: dict, optional
         This is a dictionary that is passed into the Regressor initialization.
         Use this to change the behaviour of the passed regressor. Default = empty dict
@@ -29,11 +29,10 @@ class CustomInterpolator(Base):
         self,
         regressor,
         resolution="standard",
-        coordinate_type="Euclidean",
-        reg_kwargs={},
+        coordinate_type="Euclidean"
     ):
         super().__init__(resolution, coordinate_type)
-        self.reg = regressor(**reg_kwargs)
+        self.reg = regressor
 
     def _fit(self, X, y):
         """Function for fitting.

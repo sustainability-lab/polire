@@ -1,8 +1,8 @@
-r"""
-This is a module for IDW Spatial Interpolation
+"""
+This is a module for inverse distance weighting (IDW) Spatial Interpolation
 """
 import numpy as np
-from ...utils.distance import haversine, euclidean
+from ..utils.distance import haversine, euclidean
 from ..base import Base
 from copy import deepcopy
 
@@ -19,7 +19,7 @@ def get_index(row, arr):
     return index
 
 
-class Idw(Base):
+class IDW(Base):
     """A class that is declared for performing IDW Interpolation.
     For more information on how this method works, kindly refer to
     https://en.wikipedia.org/wiki/Inverse_distance_weighting
@@ -30,7 +30,7 @@ class Idw(Base):
         The rate of fall of values from source data points.
         Higher the exponent, lower is the value when we move
         across space. Default value is 2.
-    
+
     Attributes
     ----------
     Interpolated Values : {array-like, 2D matrix}, shape(resolution, resolution)
@@ -61,7 +61,8 @@ class Idw(Base):
         elif self.coordinate_type == 'Euclidean':
             self.distance = euclidean
         else:
-            raise NotImplementedError("Only Geographic and Euclidean Coordinates are available")
+            raise NotImplementedError(
+                "Only Geographic and Euclidean Coordinates are available")
 
     def _fit(self, X, y):
         """This function is for the IDW Class.
@@ -98,6 +99,7 @@ class Idw(Base):
                 result[i] = self.y[index]
             else:
                 weights = 1 / (self.distance(point, self.X) ** self.exponent)
-                result[i] = np.multiply(self.y.reshape(self.y.shape[0],), weights).sum() / (weights.sum())
+                result[i] = np.multiply(self.y.reshape(
+                    self.y.shape[0],), weights).sum() / (weights.sum())
         self.result = result
         return self.result
