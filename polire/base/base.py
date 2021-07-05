@@ -32,6 +32,11 @@ class Base:
             Returns self
 
         """
+        assert len(X.shape) == 2, "X must be a 2D array got shape = "+str(X.shape)
+        assert X.shape[1] == 2, "X can not have more than 2 dimensions"
+        assert len(y.shape) == 1, "y should be a 1d array"
+        assert y.shape[0] == X.shape[0], "X and y must be of the same size"
+
         # saving that fit was called
         self._fit_called = True
 
@@ -60,6 +65,10 @@ class Base:
             The set of interpolated values for the points used to
             call the function.
         """
+
+        assert len(X.shape) == 2, "X must be a 2D array got shape = "+str(X.shape)
+        assert X.shape[1] == 2, "X can not have more than 2 dimensions"
+
         # checking if model is fitted or not
         assert self._fit_called, "First call fit method to fit the model"
 
