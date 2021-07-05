@@ -54,7 +54,7 @@ from polire import GP, CustomInterpolator
 model = GP(Matern32(input_dim=2))
 
 # Sklearn model
-model = CustomInterpolator(LinearRegression, reg_kwargs={"normalize": True})
+model = CustomInterpolator(LinearRegression(normalize = True))
 ```
 
 More info
