@@ -17,7 +17,7 @@ from polire import Kriging
 
 # Data
 X = np.random.rand(10, 2) # Spatial 2D points
-y = np.random.rand(10, 1) # Observations
+y = np.random.rand(10) # Observations
 X_new = np.random.rand(100, 2) # New spatial points
 
 # Fit
@@ -30,15 +30,18 @@ y_new = model.predict(X_new)
 
 ### Supported Interpolation Methods
 ```python
+from sklearn.linear_model import LinearRegression # or any sklearn regressor
+from GPy.kern import Matern32 # or any other kernel
 from polire import (
     Kriging, # Best spatial unbiased predictor
-    GP, # Gaussian process interpolator
+    GP(Matern32(input_dim=2)), # Gaussian process interpolator
     IDW, # Inverse distance weighting
     SpatialAverage,
     Spline,
     Trend,
-    Random,
-    NaturalNeighbors
+    Random, # Predict uniformly within the observation range, a reasonable baseline
+    NaturalNeighbors,
+    CustomInterpolator(LinearRegression, reg_kwargs={"normalize": True})
 )
 ```
 
