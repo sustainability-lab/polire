@@ -26,5 +26,4 @@ def test_basic():
     common(Kriging())
     common(NaturalNeighbors())
     common(SpatialAverage())
-    common(CustomInterpolator(LinearRegression,
-           reg_kwargs={"normalize": True}))
+    common(CustomInterpolator(LinearRegression(normalize=True)))
