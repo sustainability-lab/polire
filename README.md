@@ -38,7 +38,7 @@ from polire import (
     Spline,
     Trend,
     Random, # Predict uniformly within the observation range, a reasonable baseline
-    NaturalNeighbors,
+    NaturalNeighbor,
     CustomInterpolator # Supports any regressor from Scikit-learn
 )
 ```
