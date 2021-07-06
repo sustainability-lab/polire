@@ -54,16 +54,6 @@ class SpatialAverage(Base):
         return self._average(X)
 
     def _average(self, X):
-        # Going temporarily out of consistency to get speed. Fix this later
-        if self.coordinate_type == 'Euclidean':
-            dist = cdist(X, self.X)
-            mask = self.radius >= dist
-            return (self.y*mask).sum(axis=1)/mask.sum(axis=1)
-        else:
-            y_pred = []
-            for ix in range(X.shape[0]):
-                dist = self.distance(X[ix], self.X)
-                mask = self.radius >= dist
-                points_within_rad = mask.sum()
-                y_pred.append(sum(self.y[mask]) / points_within_rad)
-            return np.asarray(y_pred)
+        dist = self.distance(X, self.X)
+        mask = self.radius >= dist
+        return (self.y*mask).sum(axis=1)/mask.sum(axis=1)
