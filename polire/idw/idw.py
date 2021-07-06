@@ -4,11 +4,6 @@ This is a module for inverse distance weighting (IDW) Spatial Interpolation
 import numpy as np
 from ..utils.distance import haversine, euclidean
 from ..base import Base
-from copy import deepcopy
-
-
-def is_row_in_array(row, arr):
-    return list(row) in arr.tolist()
 
 
 def get_index(row, arr):
@@ -87,19 +82,15 @@ class IDW(Base):
         """The function call to predict using the interpolated data
         in IDW interpolation. This should not be called directly.
         """
-        result = np.zeros(X.shape[0])
-        for i in range(len(X)):
-            point = X[i]
 
-            # Preserve point estimates. This is mandatory in IDW
-            flag = is_row_in_array(point, self.X)
+        dist = self.distance(self.X, X)
+        weights = 1 / np.power(dist, self.exponent)
+        result = (weights * self.y[:, None]).sum(axis=0) / weights.sum(axis=0)
 
-            if flag:
-                index = get_index(point, self.X)
-                result[i] = self.y[index]
-            else:
-                weights = 1 / (self.distance(point, self.X) ** self.exponent)
-                result[i] = np.multiply(self.y.reshape(
-                    self.y.shape[0],), weights).sum() / (weights.sum())
-        self.result = result
-        return self.result
+        # if point is from train data, ground truth must not change
+        for i in range(X.shape[0]):
+            mask = np.equal(X[i], self.X).all(axis=1)
+            if mask.any():
+                result[i] = (self.y*mask).sum()
+
+        return result

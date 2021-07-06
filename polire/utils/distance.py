@@ -1,31 +1,27 @@
 """
 A module to have different distance metrics for spatial interpolation
 """
-import math
 import numpy as np
+from scipy.spatial.distance import cdist
 
 
-def haversine(test_point, training_locations):
+def haversine(X1, X2):
     """
-    Arguments
-    ---------
-    One test point
-    Multiple Train Points
-    
-    Long Lat Order
+    Inspired from https://stackoverflow.com/a/29546836/13330701
     """
-    test_point = test_point.reshape(1, 2)
-    difference = (test_point - training_locations) * np.pi / 180
-    test_point_lat = test_point[:, 1] * np.pi / 180
-    training_locations_lat = training_locations[:, 1] * np.pi / 180
-    
-    a = np.sin(difference[:, 0] / 2)**2 * np.cos(test_point_lat) * np.cos(training_locations_lat) +\
-        np.sin(difference[:, 1] / 2)**2 
-    radius = 6371
+    lon1, lat1, lon2, lat2 = map(
+        np.radians, [X1[:, 0, None], X1[:, 1, None], X2[:, 0, None], X2[:, 1, None]])
+
+    dlon = lon2.T - lon1
+    dlat = lat2.T - lat1
+
+    a = np.sin(dlat/2.0)**2 + np.cos(lat1)@np.cos(lat2.T) * np.sin(dlon/2.0)**2
+
     c = 2 * np.arcsin(np.sqrt(a))
-    return radius * c
+    km = 6371 * c
+    return km
+
 
 def euclidean(X1, X2):
-    return np.linalg.norm(X1 - X2, 2, axis=1)
-
-
+    # return np.linalg.norm(X1 - X2, 2, axis=1)
+    return cdist(X1, X2)
