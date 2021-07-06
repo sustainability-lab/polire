@@ -6,14 +6,6 @@ from ..utils.distance import haversine, euclidean
 from ..base import Base
 
 
-def get_index(row, arr):
-    t1 = np.where(arr[:, 0] == row[0])
-    t2 = np.where(arr[:, 1] == row[1])
-    index = np.intersect1d(t1, t2)[0]
-    # If length of index exceeds one!! - Uniqueness Error
-    return index
-
-
 class IDW(Base):
     """A class that is declared for performing IDW Interpolation.
     For more information on how this method works, kindly refer to
