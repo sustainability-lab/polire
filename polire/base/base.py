@@ -33,7 +33,7 @@ class Base:
 
         """
         assert len(X.shape) == 2, "X must be a 2D array got shape = "+str(X.shape)
-        assert X.shape[1] == 2, "X can not have more than 2 dimensions"
+        # assert X.shape[1] == 2, "X can not have more than 2 dimensions"
         assert len(y.shape) == 1, "y should be a 1d array"
         assert y.shape[0] == X.shape[0], "X and y must be of the same size"
 
