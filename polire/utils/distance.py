@@ -7,8 +7,27 @@ from scipy.spatial.distance import cdist
 
 def haversine(X1, X2):
     """
-    Inspired from https://stackoverflow.com/a/29546836/13330701
+    Arguments
+    ---------
+    One test point
+    Multiple Train Points
+
+    Long Lat Order
     """
+
+    # Non-vectorized version
+    # X1 = X1.reshape(1, 2)
+    # difference = (X1 - X2) * np.pi / 180
+    # test_point_lat = X1[:, 1] * np.pi / 180
+    # training_locations_lat = X2[:, 1] * np.pi / 180
+
+    # a = np.sin(difference[:, 0] / 2)**2 * np.cos(test_point_lat) * np.cos(training_locations_lat) +\
+    #     np.sin(difference[:, 1] / 2)**2
+    # radius = 6371
+    # c = 2 * np.arcsin(np.sqrt(a))
+    # return radius * c
+
+    # Vectorized code
     lon1, lat1, lon2, lat2 = map(
         np.radians, [X1[:, 0, None], X1[:, 1, None], X2[:, 0, None], X2[:, 1, None]])
 

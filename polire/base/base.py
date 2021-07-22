@@ -67,7 +67,7 @@ class Base:
         """
 
         assert len(X.shape) == 2, "X must be a 2D array got shape = "+str(X.shape)
-        assert X.shape[1] == 2, "X can not have more than 2 dimensions"
+        # assert X.shape[1] == 2, "X can not have more than 2 dimensions"
 
         # checking if model is fitted or not
         assert self._fit_called, "First call fit method to fit the model"
