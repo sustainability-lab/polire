@@ -2,12 +2,8 @@
 """A template for scikit-learn compatible packages."""
 
 import codecs
-import os
 
 from setuptools import find_packages, setup
-
-with open("requirements.txt") as f:
-    REQ = f.read().splitlines()
 
 DISTNAME = 'polire'
 DESCRIPTION = 'A collection of interpolation methods.'
@@ -18,9 +14,6 @@ MAINTAINER_EMAIL = 'patel_zeel@iitgn.ac.in, apoorv.agnihotri@iitgn.ac.in, deepak
 URL = 'https://sustainability-lab.github.io/polire'
 LICENSE = 'new BSD'
 DOWNLOAD_URL = 'https://sustainability-lab.github.io/polire'
-with open('VERSION') as f:
-    VERSION = f.read()
-INSTALL_REQUIRES = REQ
 CLASSIFIERS = ['Intended Audience :: Science/Research',
                'Intended Audience :: Developers',
                'License :: OSI Approved',
@@ -48,15 +41,19 @@ EXTRAS_REQUIRE = {
     ]
 }
 
+INSTALL_REQUIRES = ['matplotlib', 'numpy', 'pandas', 'pykrige', 'scikit_learn',
+                    'scipy', 'seaborn', 'Shapely', 'xgboost', 'GPy']
+
 setup(name=DISTNAME,
       maintainer=MAINTAINER,
       maintainer_email=MAINTAINER_EMAIL,
       description=DESCRIPTION,
       license=LICENSE,
       url=URL,
-      version=VERSION,
+      version='0.1.2',
       download_url=DOWNLOAD_URL,
       long_description=LONG_DESCRIPTION,
+      long_description_content_type="text/markdown",
       zip_safe=False,  # the package can run out of an .egg file
       classifiers=CLASSIFIERS,
       packages=find_packages(),
