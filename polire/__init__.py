@@ -7,3 +7,4 @@ from .natural_neighbors.natural_neighbors import NaturalNeighbor
 from .kriging.kriging import Kriging
 from .gp.gp import GP
 from .custom.custom import CustomInterpolator
+from .nsgp.nsgp import NSGP

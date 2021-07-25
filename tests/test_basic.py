@@ -18,10 +18,21 @@ def common(model):
     print('Passed', 'Time:', np.round(time()-init, 3), 'seconds')
 
 
+def common_nsgp(model):
+    print(repr(model), end=' ')
+    init = time()
+    model.fit(X, y, **{'ECM': X@X.T})
+    y_new = model.predict(X_new)
+
+    assert y_new.shape == (40, )
+    assert y_new.sum() == y_new.sum()  # No NaN
+    print('Passed', 'Time:', np.round(time()-init, 3), 'seconds')
+
+
 def test_basic():
     from polire import (IDW, Spline, Trend, GP, Kriging,
                         NaturalNeighbor, SpatialAverage,
-                        CustomInterpolator)
+                        CustomInterpolator, NSGP)
     from sklearn.linear_model import LinearRegression
 
     common(IDW())
@@ -32,6 +43,7 @@ def test_basic():
     common(NaturalNeighbor())
     common(SpatialAverage())
     common(CustomInterpolator(LinearRegression(normalize=True)))
+    common_nsgp(NSGP())
 
 
 if __name__ == '__main__':
