@@ -1,7 +1,6 @@
 from ..base import Base
 import numpy as np
 import multiprocessing as mp
-import psutil
 from GPy.kern import Matern32, Matern52, RBF, ExpQuad
 from scipy.optimize import least_squares
 
@@ -90,7 +89,7 @@ class NSGP(Base):
     def __learnLocal(self):
         #self._verbose_print('Training local kernels. This may take a few moments')
 
-        job = mp.Pool(psutil.cpu_count())
+        job = mp.Pool()
         self.__kernels = job.map(self._model, list(range(self._X.shape[0])))
         self.__C_inv = job.map(self._c_inv, self.__kernels)
         job.close()
