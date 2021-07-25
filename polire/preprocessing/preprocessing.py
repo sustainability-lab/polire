@@ -1,6 +1,6 @@
 import numpy as np
-from .idw.idw import IDW
-from .utils.distance import haversine, euclidean
+from ..idw.idw import IDW
+from ..utils.distance import haversine, euclidean
 
 
 class SpatialFeatures:
