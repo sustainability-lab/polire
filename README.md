@@ -60,9 +60,20 @@ model = GP(Matern32(input_dim=2))
 model = CustomInterpolator(LinearRegression(normalize = True))
 ```
 
+### Extract spatial features from spatio-temporal dataset
+```python
+# X and X_new are datasets as numpy arrays with first three dimensions as longitude, latitute and time.
+# y is corresponding observations with X
+
+from polire.preprocessing import SpatialFeatures
+spatial = SpatialFeatures(n_closest=10)
+Features = spatial.fit_transform(X, y)
+Features_new = spatial.transform(X_new)
+```
+
 ## More info
 
-Contributors:  [S Deepak Narayanan](https://github.com/sdeepaknarayanan), [Zeel B Patel](https://github.com/patel-zeel), [Apoorv Agnihotri](https://github.com/apoorvagnihotri), and [Nipun Batra](https://github.com/nipunbatra).
+Contributors:  [S Deepak Narayanan](https://github.com/sdeepaknarayanan), [Zeel B Patel*](https://github.com/patel-zeel), [Apoorv Agnihotri](https://github.com/apoorvagnihotri), and [Nipun Batra*](https://github.com/nipunbatra) (People with * are currently active contributers).
 
 This project is a part of Sustainability Lab at IIT Gandhinagar.
 

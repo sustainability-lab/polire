@@ -1,1 +1,1 @@
-from .preprocessing import SpatialFeatures
+from .sptial_features import SpatialFeatures
