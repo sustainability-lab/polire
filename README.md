@@ -3,6 +3,11 @@
 
 ## Polire
 
+```python
+pip install polire
+```
+
+
 The word "interpolation" has Latin origin and is composed of two words - Inter meaning between and Polire meaning to polish.
 
 This repository is a collection of several spatial interpolation algorithms. 
