@@ -7,7 +7,7 @@ class Base:
     children.
     """
 
-    def __init__(self, resolution='standard', coordinate_types='Euclidean'):
+    def __init__(self, resolution="standard", coordinate_types="Euclidean"):
         self.resolution = RESOLUTION[resolution]
         self.coordinate_type = coordinate_types
         self._fit_called = False
@@ -32,7 +32,9 @@ class Base:
             Returns self
 
         """
-        assert len(X.shape) == 2, "X must be a 2D array got shape = "+str(X.shape)
+        assert len(X.shape) == 2, "X must be a 2D array got shape = " + str(
+            X.shape
+        )
         # assert X.shape[1] == 2, "X can not have more than 2 dimensions"
         assert len(y.shape) == 1, "y should be a 1d array"
         assert y.shape[0] == X.shape[0], "X and y must be of the same size"
@@ -66,7 +68,9 @@ class Base:
             call the function.
         """
 
-        assert len(X.shape) == 2, "X must be a 2D array got shape = "+str(X.shape)
+        assert len(X.shape) == 2, "X must be a 2D array got shape = " + str(
+            X.shape
+        )
         # assert X.shape[1] == 2, "X can not have more than 2 dimensions"
 
         # checking if model is fitted or not

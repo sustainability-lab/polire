@@ -8,7 +8,7 @@ class Random(Base):
     Class to randomly interpolate by picking values between maximum and
     minimum measurements.
 
-    Note: Even if a point on the requested grid is present in 
+    Note: Even if a point on the requested grid is present in
     the training set, we return a random value for it.
     """
 
@@ -28,11 +28,15 @@ class Random(Base):
         This function is not supposed to be called directly.
         """
         return np.random.uniform(
-            low=self.ymin, high=self.ymax, size=(self.resolution, self.resolution)
+            low=self.ymin,
+            high=self.ymax,
+            size=(self.resolution, self.resolution),
         )
 
     def _predict(self, X):
         """Function for random interpolation.
         This function is not supposed to be called directly.
         """
-        return np.random.uniform(low=self.ymin, high=self.ymax, size=(X.shape[0]))
+        return np.random.uniform(
+            low=self.ymin, high=self.ymax, size=(X.shape[0])
+        )

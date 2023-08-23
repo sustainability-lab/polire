@@ -14,7 +14,7 @@ class Spline(Base):
     Parameters
     ----------
     kx, ky: int, int, optional
-        The degrees of the spline (1 <= kx, ky <= 5). 
+        The degrees of the spline (1 <= kx, ky <= 5).
         Third order (kx=ky=3) is recommended.
 
     s : float, optional
@@ -25,7 +25,12 @@ class Spline(Base):
     """
 
     def __init__(
-        self, kx=3, ky=3, s=None, resolution="standard", coordinate_type="Euclidean"
+        self,
+        kx=3,
+        ky=3,
+        s=None,
+        resolution="standard",
+        coordinate_type="Euclidean",
     ):
         super().__init__(resolution, coordinate_type)
         self.kx = kx
@@ -34,13 +39,14 @@ class Spline(Base):
 
     def _fit(self, X, y):
         """The function call to fit the spline model on the given data.
-        This function is not supposed to be called directly.        
+        This function is not supposed to be called directly.
         """
         # fitting the curve
         # bisplrep returns details of the fitted curve
         # read bisplrep docs for more info about it's return values.
-        self.tck = bisplrep(X[:, 0], X[:, 1], y,
-                            kx=self.kx, ky=self.ky, s=self.s)
+        self.tck = bisplrep(
+            X[:, 0], X[:, 1], y, kx=self.kx, ky=self.ky, s=self.s
+        )
         return self
 
     def _predict_grid(self, x1lim, x2lim):

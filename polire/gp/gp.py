@@ -9,13 +9,13 @@ from GPy.kern import RBF
 
 class GP(Base):
     """A class that is declared for performing GP interpolation.
-    GP interpolation (usually) works on the principle of finding the 
-    best unbiased predictor. 
+    GP interpolation (usually) works on the principle of finding the
+    best unbiased predictor.
 
     Parameters
     ----------
     type : str, optional
-    This parameter defines the type of Kriging under consideration. This 
+    This parameter defines the type of Kriging under consideration. This
     implementation uses PyKrige package  (https://github.com/bsmurphy/PyKrige).
     The user needs to choose between "Ordinary" and "Universal".
 
@@ -25,12 +25,11 @@ class GP(Base):
         self,
         kernel=RBF(2, ARD=True),
     ):
-
         super().__init__()
         self.kernel = kernel
 
     def _fit(self, X, y, n_restarts=5, verbose=False, random_state=None):
-        """ Fit method for GP Interpolation
+        """Fit method for GP Interpolation
         This function shouldn't be called directly.
         """
         np.random.seed(random_state)

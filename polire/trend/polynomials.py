@@ -22,7 +22,14 @@ def _create_polynomial(order):
 
         def func(X, a, b, c, d, e, f):
             x1, x2 = X
-            return a + b * x1 + c * x2 + d * (x1 ** 2) + e * (x1 ** 2) + f * x1 * x2
+            return (
+                a
+                + b * x1
+                + c * x2
+                + d * (x1**2)
+                + e * (x1**2)
+                + f * x1 * x2
+            )
 
     else:
         raise NotImplementedError(

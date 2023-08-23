@@ -26,10 +26,7 @@ class CustomInterpolator(Base):
     """
 
     def __init__(
-        self,
-        regressor,
-        resolution="standard",
-        coordinate_type="Euclidean"
+        self, regressor, resolution="standard", coordinate_type="Euclidean"
     ):
         super().__init__(resolution, coordinate_type)
         self.reg = regressor

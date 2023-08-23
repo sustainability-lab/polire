@@ -29,12 +29,17 @@ def haversine(X1, X2):
 
     # Vectorized code
     lon1, lat1, lon2, lat2 = map(
-        np.radians, [X1[:, 0, None], X1[:, 1, None], X2[:, 0, None], X2[:, 1, None]])
+        np.radians,
+        [X1[:, 0, None], X1[:, 1, None], X2[:, 0, None], X2[:, 1, None]],
+    )
 
     dlon = lon2.T - lon1
     dlat = lat2.T - lat1
 
-    a = np.sin(dlat/2.0)**2 + np.cos(lat1)@np.cos(lat2.T) * np.sin(dlon/2.0)**2
+    a = (
+        np.sin(dlat / 2.0) ** 2
+        + np.cos(lat1) @ np.cos(lat2.T) * np.sin(dlon / 2.0) ** 2
+    )
 
     c = 2 * np.arcsin(np.sqrt(a))
     km = 6371 * c

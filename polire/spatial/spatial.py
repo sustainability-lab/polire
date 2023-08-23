@@ -13,17 +13,22 @@ class SpatialAverage(Base):
     """
 
     def __init__(
-        self, radius=100, resolution="standard", coordinate_type="Euclidean", **kwargs
+        self,
+        radius=100,
+        resolution="standard",
+        coordinate_type="Euclidean",
+        **kwargs
     ):
         super().__init__(resolution, coordinate_type)
         self.radius = radius
-        if self.coordinate_type == 'Geographic':
+        if self.coordinate_type == "Geographic":
             self.distance = haversine
-        elif self.coordinate_type == 'Euclidean':
+        elif self.coordinate_type == "Euclidean":
             self.distance = euclidean
         else:
             raise NotImplementedError(
-                "Only Geographic and Euclidean Coordinates are available")
+                "Only Geographic and Euclidean Coordinates are available"
+            )
 
     def _fit(self, X, y):
         """Function for fitting.
@@ -56,4 +61,4 @@ class SpatialAverage(Base):
     def _average(self, X):
         dist = self.distance(X, self.X)
         mask = self.radius >= dist
-        return (self.y*mask).sum(axis=1)/mask.sum(axis=1)
+        return (self.y * mask).sum(axis=1) / mask.sum(axis=1)

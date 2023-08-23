@@ -36,20 +36,23 @@ class IDW(Base):
 
     """
 
-    def __init__(self, exponent=2, resolution="standard", coordinate_type="Euclidean"):
+    def __init__(
+        self, exponent=2, resolution="standard", coordinate_type="Euclidean"
+    ):
         super().__init__(resolution, coordinate_type)
         self.exponent = exponent
         self.interpolated_values = None
         self.X = None
         self.y = None
         self.result = None
-        if self.coordinate_type == 'Geographic':
+        if self.coordinate_type == "Geographic":
             self.distance = haversine
-        elif self.coordinate_type == 'Euclidean':
+        elif self.coordinate_type == "Euclidean":
             self.distance = euclidean
         else:
             raise NotImplementedError(
-                "Only Geographic and Euclidean Coordinates are available")
+                "Only Geographic and Euclidean Coordinates are available"
+            )
 
     def _fit(self, X, y):
         """This function is for the IDW Class.
@@ -60,8 +63,8 @@ class IDW(Base):
         return self
 
     def _predict_grid(self, x1lim, x2lim):
-        """ Gridded interpolation for natural neighbors interpolation. This function should not
-        be called directly. 
+        """Gridded interpolation for natural neighbors interpolation. This function should not
+        be called directly.
         """
         lims = (*x1lim, *x2lim)
         x1min, x1max, x2min, x2max = lims
@@ -83,6 +86,6 @@ class IDW(Base):
         for i in range(X.shape[0]):
             mask = np.equal(X[i], self.X).all(axis=1)
             if mask.any():
-                result[i] = (self.y*mask).sum()
+                result[i] = (self.y * mask).sum()
 
         return result

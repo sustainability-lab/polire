@@ -8,9 +8,9 @@ from scipy import spatial
 
 
 def make_grid(self, x, y, res, offset=0.2):
-    """ This function returns the grid to perform interpolation on.
+    """This function returns the grid to perform interpolation on.
        This function is used inside the fit() attribute of the idw class.
-    
+
     Parameters
     ----------
     x: array-like, shape(n_samples,)
@@ -24,7 +24,7 @@ def make_grid(self, x, y, res, offset=0.2):
     offset: float, optional
         A value between 0 and 0.5 that specifies the extra interpolation to be done
         Default is 0.2
-    
+
     Returns
     -------
     xx : {array-like, 2D}, shape (n_samples, n_samples)
@@ -63,7 +63,9 @@ def find_closest(grid, X, l=2):
 
     ref - https://stackoverflow.com/questions/10818546/finding-index-of-nearest-point-in-numpy-arrays-of-x-and-y-coordinates
     """
-    points = np.asarray([grid[0].ravel(), grid[1].ravel()]).T  # ravel is inplace
+    points = np.asarray(
+        [grid[0].ravel(), grid[1].ravel()]
+    ).T  # ravel is inplace
     kdtree = spatial.KDTree(points)
     ixs = []  # for containing the indices of closest points found on grid
 

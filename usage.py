@@ -5,8 +5,16 @@ import numpy as np
 import pandas as pd
 from GPy.kern import Matern32
 
-from polire import (Random, Trend, Spline, IDW,
-                    Kriging, SpatialAverage, NaturalNeighbor, GP)
+from polire import (
+    Random,
+    Trend,
+    Spline,
+    IDW,
+    Kriging,
+    SpatialAverage,
+    NaturalNeighbor,
+    GP,
+)
 
 # sample data
 X = [[0, 0], [0, 3], [3, 0], [3, 3]]
@@ -18,9 +26,9 @@ regressors = [
     SpatialAverage(),
     Spline(kx=1, ky=1),
     Trend(),
-    IDW(coordinate_type='Geographic'),
+    IDW(coordinate_type="Geographic"),
     Kriging(),
-    GP(Matern32(input_dim=2))
+    GP(Matern32(input_dim=2)),
 ]
 
 
@@ -40,8 +48,8 @@ def test_grid():
     print("\nTesting on a reasonable dataset")
 
     df = pd.read_csv("tests/data/30-03-18.csv")
-    X1 = np.array(df[['longitude', 'latitude']])
-    y1 = np.array(df['value'])
+    X1 = np.array(df[["longitude", "latitude"]])
+    y1 = np.array(df["value"])
 
     for r in regressors:
         r.fit(X1, y1)
@@ -77,13 +85,10 @@ def test_nn():
     print("\nNatural Neighbors - Point Wise")
     nn = NaturalNeighbor()
     df = pd.read_csv("tests/data/30-03-18.csv")
-    X = np.array(df[['longitude', 'latitude']])
-    y = np.array(df['value'])
+    X = np.array(df[["longitude", "latitude"]])
+    y = np.array(df["value"])
     nn.fit(X, y)
-    test_data = [
-        [77.16, 28.70],
-        X[0]
-    ]
+    test_data = [[77.16, 28.70], X[0]]
     y_pred = nn.predict(np.array(test_data))
     print(y_pred)
     del nn

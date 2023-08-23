@@ -32,7 +32,7 @@ def order_poly(vertices):
 
     Arguments
     ---------
-    vertices : {array-like, 2D matrix} 
+    vertices : {array-like, 2D matrix}
     This contains the list of vertices of the Polygon to be sorted
 
     Returns
@@ -47,7 +47,8 @@ def order_poly(vertices):
         """This is the condition to be used while sorting. We convert the coordinates
         to Polar and sort the points
         """
-        return atan2(x[0] - mean_x, x[1] - mean_y)*180/np.pi
+        return atan2(x[0] - mean_x, x[1] - mean_y) * 180 / np.pi
+
     return sorted(vertices, key=condition)
 
 
@@ -67,11 +68,11 @@ class NaturalNeighbor(Base):
         True value displays the voronoi tesselation to the user after fitting the model.
         Default value is False.
 
-    Notes 
+    Notes
     -----
     This is for contributors:
         The way in which part of the code is used is in the assumption that
-        we use the data's ordering to find its voronoi partitions. 
+        we use the data's ordering to find its voronoi partitions.
 
     References
     ----------
@@ -93,8 +94,12 @@ class NaturalNeighbor(Base):
         self.y = None
         self.result = None
         self.voronoi = None
-        self.vertices = None  # This variable stored the voronoi partition's vertices
-        self.vertex_poly_map = dict()  # This variable stores the polygon to data point map
+        self.vertices = (
+            None  # This variable stored the voronoi partition's vertices
+        )
+        self.vertex_poly_map = (
+            dict()
+        )  # This variable stores the polygon to data point map
         self.display = display
 
     def _fit(self, X, y):
@@ -131,8 +136,8 @@ class NaturalNeighbor(Base):
         return self
 
     def _predict_grid(self, x1lim, x2lim):
-        """ Gridded interpolation for natural neighbors interpolation. This function should not
-        be called directly. 
+        """Gridded interpolation for natural neighbors interpolation. This function should not
+        be called directly.
         """
         lims = (*x1lim, *x2lim)
         x1min, x1max, x2min, x2max = lims
@@ -143,7 +148,7 @@ class NaturalNeighbor(Base):
 
     def _predict(self, X):
         """The function taht is called to predict the interpolated data in Natural Neighbors
-        interpolation. This should not be called directly. 
+        interpolation. This should not be called directly.
         If this method returns None, then we cannot interpolate because of the formed Voronoi
         Tesselation
         """
@@ -152,9 +157,7 @@ class NaturalNeighbor(Base):
         # length of the to be predicted array
         # not a bad idea if memory is not a constraints
         for index in range(len(X)):
-
             if is_row_in_array(X[index], self.X):
-
                 idx = get_index(X[index], self.X)
                 # Check if query data point already exists
                 result[index] = self.y[idx]
@@ -194,11 +197,13 @@ class NaturalNeighbor(Base):
 
                 for i in self.vertex_poly_map:
                     if new_polygon.intersects(self.vertex_poly_map[i]):
-                        weights[i] = (new_polygon.intersection(
-                            self.vertex_poly_map[i])).area/new_polygon_area
+                        weights[i] = (
+                            new_polygon.intersection(self.vertex_poly_map[i])
+                        ).area / new_polygon_area
 
-                prediction = np.array([self.y[i]*weights[i]
-                                      for i in weights]).sum()
+                prediction = np.array(
+                    [self.y[i] * weights[i] for i in weights]
+                ).sum()
                 result[index] = prediction
                 del vor, weights, new_polygon, new_polygon_area
 

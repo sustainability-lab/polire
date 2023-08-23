@@ -23,14 +23,16 @@ class NSGP(Base):
         type of kernel to be used
     """
 
-    def __init__(self, N=10, eta=1, kernel_name='m32', verbose=True):
+    def __init__(self, N=10, eta=1, kernel_name="m32", verbose=True):
         super().__init__()
         self.__N = N + 1  # Number of datapoints for local kernel learning
         self.__eta = eta  # Eta hyperparameter for weighting function
         self.__kernel_name = kernel_name
-        self.__param_dict = {'N': self.__N,
-                             'eta': self.__eta,
-                             'kernel_name': self.__kernel_name}
+        self.__param_dict = {
+            "N": self.__N,
+            "eta": self.__eta,
+            "kernel_name": self.__kernel_name,
+        }
         self._KX_inv = None
 
     def get_all_params(self):
@@ -54,10 +56,13 @@ class NSGP(Base):
 
     def __get_close_locs(self):
         self.__calculate_dmat()  # Distance matrix
-        return [self.__dmat[i].argsort()[:self.__N] for i in range(self._X.shape[0])]
+        return [
+            self.__dmat[i].argsort()[: self.__N]
+            for i in range(self._X.shape[0])
+        ]
 
     def __weight_func(self, S):
-        return np.exp(-(1/self.__eta) * ((S - self._X)**2).sum(axis=1))
+        return np.exp(-(1 / self.__eta) * ((S - self._X) ** 2).sum(axis=1))
 
     def _model(self, loc):
         def __D_z(sj):
@@ -68,17 +73,35 @@ class NSGP(Base):
             kernel.variance = x[0]
             kernel.lengthscale = x[1:]
             kern_vals = kernel.K(self._X[self.__close_locs[loc]])
-            term = (__D_z(self.__close_locs[loc]) - kern_vals)/kern_vals
+            term = (__D_z(self.__close_locs[loc]) - kern_vals) / kern_vals
             return np.sum(term**2)
 
         # ARD can be added
-        kern_dict = {'m32': Matern32(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])), ARD=True),
-                     'm52': Matern52(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])), ARD=True),
-                     'rbf': RBF(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])), ARD=True),
-                     'expqd':  ExpQuad(input_dim=self._X.shape[1], active_dims=list(range(self._X.shape[1])), ARD=True)}
+        kern_dict = {
+            "m32": Matern32(
+                input_dim=self._X.shape[1],
+                active_dims=list(range(self._X.shape[1])),
+                ARD=True,
+            ),
+            "m52": Matern52(
+                input_dim=self._X.shape[1],
+                active_dims=list(range(self._X.shape[1])),
+                ARD=True,
+            ),
+            "rbf": RBF(
+                input_dim=self._X.shape[1],
+                active_dims=list(range(self._X.shape[1])),
+                ARD=True,
+            ),
+            "expqd": ExpQuad(
+                input_dim=self._X.shape[1],
+                active_dims=list(range(self._X.shape[1])),
+                ARD=True,
+            ),
+        }
 
         kernel = kern_dict[self.__kernel_name]
-        params = least_squares(__obfunc, np.ones((self._X.shape[1]+1))).x
+        params = least_squares(__obfunc, np.ones((self._X.shape[1] + 1))).x
         kernel.variance = params[0]
         kernel.lengthscale = params[1:]
         return kernel.K
@@ -87,14 +110,14 @@ class NSGP(Base):
         return np.linalg.pinv(kern_func(self._X))
 
     def __learnLocal(self):
-        #self._verbose_print('Training local kernels. This may take a few moments')
+        # self._verbose_print('Training local kernels. This may take a few moments')
 
         job = mp.Pool()
         self.__kernels = job.map(self._model, list(range(self._X.shape[0])))
         self.__C_inv = job.map(self._c_inv, self.__kernels)
         job.close()
 
-        #self._verbose_print('Training complete')
+        # self._verbose_print('Training complete')
 
     def _Kernel(self, S1, S2=None):
         """
@@ -113,19 +136,22 @@ class NSGP(Base):
         self.__v_s1 = np.zeros((S1.shape[0], self._X.shape[0]))
         self.__v_s2 = np.zeros((S2.shape[0], self._X.shape[0]))
         self.__c_mat_s1 = np.zeros(
-            (self._X.shape[0], S1.shape[0], self._X.shape[0]))
+            (self._X.shape[0], S1.shape[0], self._X.shape[0])
+        )
         self.__c_mat_s2 = np.zeros(
-            (self._X.shape[0], self._X.shape[0], S2.shape[0]))
+            (self._X.shape[0], self._X.shape[0], S2.shape[0])
+        )
         self.__c_mat_s1s2 = np.zeros(
-            (self._X.shape[0], S1.shape[0], S2.shape[0]))
+            (self._X.shape[0], S1.shape[0], S2.shape[0])
+        )
 
         for s1i, s1 in enumerate(S1):
             s_vec = self.__weight_func(s1)
-            self.__v_s1[s1i, :] = s_vec/s_vec.sum()
+            self.__v_s1[s1i, :] = s_vec / s_vec.sum()
         if S2exists:
             for s2i, s2 in enumerate(S2):
                 s_vec = self.__weight_func(s2)
-                self.__v_s2[s2i, :] = s_vec/s_vec.sum()
+                self.__v_s2[s2i, :] = s_vec / s_vec.sum()
             for i in range(self._X.shape[0]):
                 self.__c_mat_s1[i, :, :] = self.__kernels[i](S1, self._X)
                 self.__c_mat_s2[i, :, :] = self.__kernels[i](self._X, S2)
@@ -138,23 +164,33 @@ class NSGP(Base):
                 self.__c_mat_s1s2[i, :, :] = self.__kernels[i](S1)
 
         # Calculating main covariance function
-        first_term = np.zeros((S1.shape[0], S2.shape[0]), dtype='float64')
+        first_term = np.zeros((S1.shape[0], S2.shape[0]), dtype="float64")
         for i in range(self._X.shape[0]):
             for j in range(self._X.shape[0]):
-                first_term += (self.__c_mat_s1[i, :, :]
-                               .dot(self.__C_inv[i])
-                               .dot(self._Gamma)
-                               .dot(self.__C_inv[j])
-                               .dot(self.__c_mat_s2[j, :, :])) *\
-                    (self.__v_s1[:, i].reshape(-1, 1)
-                     .dot(self.__v_s2[:, j].reshape(1, -1)))
+                first_term += (
+                    self.__c_mat_s1[i, :, :]
+                    .dot(self.__C_inv[i])
+                    .dot(self._Gamma)
+                    .dot(self.__C_inv[j])
+                    .dot(self.__c_mat_s2[j, :, :])
+                ) * (
+                    self.__v_s1[:, i]
+                    .reshape(-1, 1)
+                    .dot(self.__v_s2[:, j].reshape(1, -1))
+                )
 
         second_term = np.zeros((S1.shape[0], S2.shape[0]))
         for i in range(self._X.shape[0]):
-            second_term += np.sqrt(self.__v_s1[:, i].reshape(-1, 1).dot(self.__v_s2[:, i].reshape(1, -1))) *\
-                (self.__c_mat_s1s2[i, :, :] - self.__c_mat_s1[i, :, :].
-                 dot(self.__C_inv[i]).
-                 dot(self.__c_mat_s2[i, :, :]))
+            second_term += np.sqrt(
+                self.__v_s1[:, i]
+                .reshape(-1, 1)
+                .dot(self.__v_s2[:, i].reshape(1, -1))
+            ) * (
+                self.__c_mat_s1s2[i, :, :]
+                - self.__c_mat_s1[i, :, :]
+                .dot(self.__C_inv[i])
+                .dot(self.__c_mat_s2[i, :, :])
+            )
 
         return first_term + second_term
 
@@ -166,15 +202,21 @@ class NSGP(Base):
 
         self._Gamma = ECM  # Empirical Covariance Matrix
         assert type(self._Gamma) == type(
-            np.zeros((1, 1))), 'ECM must be a numpy array'
-        assert self._Gamma.shape[0] == self._Gamma.shape[1] == X.shape[0], 'ECM must have ('+str(
-            X.shape[0])+', '+str(X.shape[0])+') shape'
+            np.zeros((1, 1))
+        ), "ECM must be a numpy array"
+        assert self._Gamma.shape[0] == self._Gamma.shape[1] == X.shape[0], (
+            "ECM must have ("
+            + str(X.shape[0])
+            + ", "
+            + str(X.shape[0])
+            + ") shape"
+        )
 
         self._X = X  # training fetures
         self._y = y  # Training values
-        self.__param_dict['X'] = X
-        self.__param_dict['y'] = y
-        self.__param_dict['ECM'] = self._Gamma
+        self.__param_dict["X"] = X
+        self.__param_dict["y"] = y
+        self.__param_dict["ECM"] = self._Gamma
 
         # Get closest N locations for each train location
         self.__close_locs = self.__get_close_locs()
@@ -189,11 +231,13 @@ class NSGP(Base):
         if self._KX_inv is None:
             self._KX_inv = np.linalg.pinv(self._Kernel(self._X, self._X))
         KX_test = self._Kernel(X, self._X)
-        pred_mean = KX_test\
-            .dot(self._KX_inv)\
-            .dot(self._y - self._y.mean()) + self._y.mean()
+        pred_mean = (
+            KX_test.dot(self._KX_inv).dot(self._y - self._y.mean())
+            + self._y.mean()
+        )
         if return_cov:
-            pred_var = self._Kernel(
-                X, X) - KX_test.dot(self._KX_inv).dot(KX_test.T)
+            pred_var = self._Kernel(X, X) - KX_test.dot(self._KX_inv).dot(
+                KX_test.T
+            )
             return (pred_mean, pred_var)
         return pred_mean

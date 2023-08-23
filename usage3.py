@@ -22,10 +22,10 @@ for r in [
     CustomInterpolator(RandomForestRegressor()),
     CustomInterpolator(LinearRegression(normalize=True)),
     CustomInterpolator(KNeighborsRegressor(n_neighbors=3, weights="distance")),
-    CustomInterpolator(GaussianProcessRegressor(
-        normalize_y=True, kernel=Matern()))
+    CustomInterpolator(
+        GaussianProcessRegressor(normalize_y=True, kernel=Matern())
+    ),
 ]:
-
     r.fit(X, y)
     Z = r.predict_grid((0, 3), (0, 3)).reshape(100, 100)
     sns.heatmap(Z)
