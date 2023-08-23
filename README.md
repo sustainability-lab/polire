@@ -15,6 +15,8 @@ The word "interpolation" has Latin origin and is composed of two words - Inter m
 This repository is a collection of several spatial interpolation algorithms. 
 
 ## Examples
+
+To checkout a practical example of how to use this library, please refer to [the documentation](https://sustainability-lab.github.io/polire/).
 ### Minimal example of interpolation
 ```python
 import numpy as np
@@ -48,7 +50,7 @@ from polire import (
 )
 ```
 
-### Use GP kernels from GPy and regressors from sklearn
+### Use GP kernels from GPy and regressors from sklearn (temporary unavailable)
 ```python
 from sklearn.linear_model import LinearRegression # or any Scikit-learn regressor
 from GPy.kern import Matern32 # or any other GPy kernel
@@ -81,4 +83,24 @@ This project is a part of Sustainability Lab at IIT Gandhinagar.
 
 Acknowledgement to sklearn template for helping to package into a PiPy package.
 
+## Citation
 
+If you use this code, please cite the following paper:
+
+```
+@inproceedings{10.1145/3384419.3430407,
+author = {Narayanan, S Deepak and Patel, Zeel B and Agnihotri, Apoorv and Batra, Nipun},
+title = {A Toolkit for Spatial Interpolation and Sensor Placement},
+year = {2020},
+isbn = {9781450375900},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3384419.3430407},
+doi = {10.1145/3384419.3430407},
+booktitle = {Proceedings of the 18th Conference on Embedded Networked Sensor Systems},
+pages = {653–654},
+numpages = {2},
+location = {Virtual Event, Japan},
+series = {SenSys '20}
+}
+```
