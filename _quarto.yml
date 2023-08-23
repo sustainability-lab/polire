@@ -1,0 +1,22 @@
+project:
+  type: website
+  output-dir: docs
+
+# render only the contents mentioned in the _quarto.yml file
+
+
+website: 
+  title: "Polire"
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - section: "Introduction"
+        path: "index.qmd"
+
+      - section: "Examples"
+        contents:
+          - examples/all_in_one.ipynb
+
+execute:
+  freeze: auto

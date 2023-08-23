@@ -9,3 +9,7 @@ build
 dist
 polire.egg-info
 global_test.py
+/.quarto/
+
+# ignore docs
+docs/
