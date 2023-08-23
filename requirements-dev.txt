@@ -1,6 +1,0 @@
-pytest
-scikit-learn
-pre-commit
-xarray
-pooch
-jinja2

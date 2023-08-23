@@ -1,9 +1,0 @@
-matplotlib
-numpy
-pandas
-pykrige
-scipy
-seaborn
-Shapely
-xgboost
-# GPy
