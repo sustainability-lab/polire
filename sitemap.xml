@@ -2,26 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://github.com/sustainability-lab/polire/examples/all_in_one.html</loc>
-    <lastmod>2023-08-23T22:05:58.290Z</lastmod>
+    <lastmod>2023-08-23T22:13:44.648Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/sustainability-lab/polire/polire/idw/tests/IDW Initial.html</loc>
-    <lastmod>2023-08-23T22:05:57.382Z</lastmod>
+    <lastmod>2023-08-23T22:13:43.740Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/sustainability-lab/polire/polire/gp/tests/GP interpolation.html</loc>
-    <lastmod>2023-08-23T22:05:56.670Z</lastmod>
+    <lastmod>2023-08-23T22:13:43.020Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/sustainability-lab/polire/index.html</loc>
-    <lastmod>2023-08-23T22:05:55.966Z</lastmod>
+    <lastmod>2023-08-23T22:13:42.332Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/sustainability-lab/polire/polire/kriging/tests/Kriging Interpolation.html</loc>
-    <lastmod>2023-08-23T22:05:57.002Z</lastmod>
+    <lastmod>2023-08-23T22:13:43.352Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/sustainability-lab/polire/polire/idw/tests/Numpy+IDWTest.html</loc>
-    <lastmod>2023-08-23T22:05:57.754Z</lastmod>
+    <lastmod>2023-08-23T22:13:44.112Z</lastmod>
   </url>
 </urlset>
