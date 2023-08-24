@@ -34,7 +34,7 @@ jobs:
         pre-commit run --all-files
     - name: Test
       run: |
-        pytest -v --cov=stheno --cov-report term-missing
+        pytest -v --cov=polire --cov-report term-missing
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
