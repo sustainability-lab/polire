@@ -1,6 +1,6 @@
 ![Tests](https://github.com/sustainability-lab/polire/actions/workflows/tests.yml/badge.svg)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-
+[![Coverage](https://coveralls.io/repos/github/sustainability-lab/polire/badge.svg?branch=master)](https://coveralls.io/github/sustainability-lab/polire?branch=master)
 
 ## Polire
 
@@ -9,14 +9,14 @@ pip install polire
 ```
 
 
-The word "interpolation" has Latin origin and is composed of two words - Inter meaning between and Polire meaning to polish.
+The word "interpolation" has a Latin origin and is composed of two words - Inter, meaning between, and Polire, meaning to polish.
 
 
 This repository is a collection of several spatial interpolation algorithms. 
 
 ## Examples
+Please refer to [the documentation](https://sustainability-lab.github.io/polire/) to check out practical examples on real datasets.
 
-To checkout a practical example of how to use this library, please refer to [the documentation](https://sustainability-lab.github.io/polire/).
 ### Minimal example of interpolation
 ```python
 import numpy as np
@@ -50,18 +50,21 @@ from polire import (
 )
 ```
 
-### Use GP kernels from GPy and regressors from sklearn (temporary unavailable)
+### Use GP kernels from GPy (temporarily unavailable)
 ```python
-from sklearn.linear_model import LinearRegression # or any Scikit-learn regressor
 from GPy.kern import Matern32 # or any other GPy kernel
-
-from polire import GP, CustomInterpolator
 
 # GP model
 model = GP(Matern32(input_dim=2))
+```
+
+### Regressors from sklearn
+```py
+from sklearn.linear_model import LinearRegression # or any Scikit-learn regressor
+from polire import GP, CustomInterpolator
 
 # Sklearn model
-model = CustomInterpolator(LinearRegression(normalize = True))
+model = CustomInterpolator(LinearRegression())
 ```
 
 ### Extract spatial features from spatio-temporal dataset
@@ -75,17 +78,9 @@ Features = spatial.fit_transform(X, y)
 Features_new = spatial.transform(X_new)
 ```
 
-## More info
-
-Contributors:  [S Deepak Narayanan](https://github.com/sdeepaknarayanan), [Zeel B Patel*](https://github.com/patel-zeel), [Apoorv Agnihotri](https://github.com/apoorvagnihotri), and [Nipun Batra*](https://github.com/nipunbatra) (People with * are currently active contributers).
-
-This project is a part of Sustainability Lab at IIT Gandhinagar.
-
-Acknowledgement to sklearn template for helping to package into a PiPy package.
-
 ## Citation
 
-If you use this code, please cite the following paper:
+If you use this library, please cite the following paper:
 
 ```
 @inproceedings{10.1145/3384419.3430407,
