@@ -1,5 +1,6 @@
 pytest
 pytest-cov
+coveralls
 scikit-learn
 pre-commit
 xarray
