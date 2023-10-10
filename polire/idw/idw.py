@@ -79,10 +79,7 @@ class IDW(Base):
         """
         
         dist = self.distance(self.X, X)
-        for i in range(len(dist)):
-            for j in range(len(dist[0])):
-                if (dist[i][j]==0):
-                    dist[i][j] = 1.0e-10
+        dist = np.where(dist==0,1e-10,dist)
 
         weights = 1 / np.power(dist, self.exponent)
         result = (weights * self.y[:, None]).sum(axis=0) / weights.sum(axis=0)
