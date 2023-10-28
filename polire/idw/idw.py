@@ -77,15 +77,17 @@ class IDW(Base):
         """The function call to predict using the interpolated data
         in IDW interpolation. This should not be called directly.
         """
-
+        
         dist = self.distance(self.X, X)
+        dist = np.where(dist==0,1e-10,dist)
+
         weights = 1 / np.power(dist, self.exponent)
         result = (weights * self.y[:, None]).sum(axis=0) / weights.sum(axis=0)
 
         # if point is from train data, ground truth must not change
-        for i in range(X.shape[0]):
-            mask = np.equal(X[i], self.X).all(axis=1)
-            if mask.any():
-                result[i] = (self.y * mask).sum()
+        # for i in range(X.shape[0]):
+        #     mask = np.equal(X[i], self.X).all(axis=1)
+        #     if mask.any():
+        #         result[i] = (self.y * mask).sum()
 
         return result
