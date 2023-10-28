@@ -14,6 +14,7 @@ The word "interpolation" has a Latin origin and is composed of two words - Inter
 
 This repository is a collection of several spatial interpolation algorithms. 
 
+
 ## Examples
 Please refer to [the documentation](https://sustainability-lab.github.io/polire/) to check out practical examples on real datasets.
 
